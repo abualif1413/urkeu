@@ -1,0 +1,149 @@
+body {
+	
+}
+
+.content {
+	font-family: Arial;
+	padding: 5px 15px;
+}
+
+.content .judul {
+	box-sizing: border-box;
+	font-size: 20pt;
+	font-weight: bold;
+	padding-bottom: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-bottom: outset 1px #a9bad4;
+	text-shadow: 1px 3px #DEDFE0;
+}
+
+.content .judul small {
+	color: #2b6b99;
+	font-weight: lighter;
+	font-size: 70%;
+}
+
+.form_input .label {
+	font-weight: bold;
+	font-size: 8pt;
+}
+
+.form_input .caption {
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+.form_input input[type="text"], .form_input input[type="password"], .form_input select, .form_input textarea {
+	background-color: #f9f9f9;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 5px 5px;
+	outline: none;
+	border: solid 1px #CCC;
+	box-shadow: 1px 1px #F0F0F0;
+	font-family: arial;
+	font-size: 9pt;
+	font-weight: bold;
+	border-radius: 3px;
+}
+
+.form_input input[type="text"]:focus,  .form_input input[type="password"]:focus, .form_input select:focus, .form_input textarea:focus {
+	border: solid 1px #898EAA;
+	box-shadow: 1px 1px 2px #8da5a4;
+}
+
+.tanggal {
+	text-align: center;
+}
+
+.angka {
+	color: red;
+	text-align: right;
+	font-weight: bold;
+	font-family: serif;
+	font-size: 11pt;
+}
+
+.form_input .judul_form {
+	font-weight: bold;
+	padding: 10px 0px;
+	font-size: 12pt;
+	color: #959275;
+}
+
+.tbl_input {
+	font-size: 8pt;
+	border-collapse: collapse;
+}
+
+.tbl_input th {
+	background-color: #1F3D6B;
+	padding: 5px 2px;
+	color: white;
+	font-size: 110%;
+	border-right: solid 0px red;
+}
+
+.tbl_input .total td {
+	background-color: #46713D;
+	padding: 3px;
+	color: white;
+	font-size: 110%;
+	border-right: solid 1px #46713D;
+	font-weight: bold;
+}
+
+.tbl_input td {
+	border: solid 1px #d1d7f9;
+	font-size: 9pt;
+	padding: 3px;
+	font-family: calibri;
+}
+
+.tbl_input tr {
+	color: #2E2E53;
+}
+
+.tbl_input tr:nth-child(odd) {
+	background-color: #f3f3fb;
+}
+
+.tbl_input th:nth-child(1) {
+	border-left: solid 0px red;
+}
+
+.frm_layout tr td {
+	padding: 2px 5px;
+}
+
+.kelang_garis {
+	height: 15px;
+	margin-bottom: 15px;
+	border-bottom: outset 1px #a9bad4;
+}
+
+.button {
+	padding: 3px 10px;
+	border: solid 2px #A5A1CE;
+	font-family: calibri;
+	font-weight: bold;
+	border-radius: 5px;
+}
+
+.kotak {
+	padding: 10px 20px;
+	border: solid 2px #bec6c8;
+	border-radius: 10px;
+	font-size: 9pt;
+	font-family: verdana;
+	color: #113238;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.kotak.merah {
+	background-color: #cf4343;
+	border: solid 2px #a71f1f;
+	color: #eaeff6;
+}

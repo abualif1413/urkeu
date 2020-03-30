@@ -1,0 +1,28 @@
+{
+	"tabs" : [
+		{
+			"id" : "tab_1",
+			"text" : "Keperluan Belanja",
+			"active" : true,
+			"items" : [
+				{ 
+					"type":"block", "text":"Data", "list":[
+						{"id" : "item_1_1", "type" : "button", "text" : "Input Data", "isbig" : true, "img" : "48add.png"},
+						{"id" : "item_1_2", "type" : "button", "text" : "Edit Data", "isbig" : true, "img" : "48edit.png"}
+					]
+				}
+			]
+		},
+		{
+			"id" : "tab_2",
+			"text" : "Pengguna",
+			"items" : [
+				{
+					"type":"block", "text":"Pengguna", "list":[
+						{"id" : "item_3_1", "type" : "button", "text" : "Logout", "isbig" : true, "img" : "48add.png"}
+					]
+				}
+			]
+		}
+	]
+}
