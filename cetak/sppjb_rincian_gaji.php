@@ -24,7 +24,9 @@
 	$konf_wkpa = get_ttd_dokumen(1, "001", $record["tanggal"]);
 	
 	$tulisan_nrp = "NRP";
-	if($record["id_jenis_pegawai"] == 1)
+	if($record["id_jenis_pegawai"] == "")
+		$tulisan_nrp = "";
+	else if($record["id_jenis_pegawai"] == 1)
 		$tulisan_nrp = "NRP";
 	else if($record["id_jenis_pegawai"] == 2)
 		$tulisan_nrp = "NIP";
@@ -32,7 +34,9 @@
 		$tulisan_nrp = "NIK";
 	
 	$tulisan_nrp_diketahui = "NRP";
-	if($record["id_jenis_pegawai_diketahui"] == 1)
+	if($record["id_jenis_pegawai_diketahui"] == "")
+		$tulisan_nrp_diketahui = "";
+	else if($record["id_jenis_pegawai_diketahui"] == 1)
 		$tulisan_nrp_diketahui = "NRP";
 	else if($record["id_jenis_pegawai_diketahui"] == 2)
 		$tulisan_nrp_diketahui = "NIP";
@@ -137,7 +141,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td style='border: solid 1px black;'>
+				<td style='border: solid 1px black; page-break-inside: avoid;'>
 				
 					<br />
 					<table width='100%' cellspacing='0' cellpadding='0' style='font-size: 9pt; table-layout: fixed;' border='0'>
@@ -167,7 +171,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td style='border: solid 1px black;'>
+				<td style='border: solid 1px black; page-break-inside: avoid;'>
 				
 					<br />
 					<table width='100%' cellspacing='0' cellpadding='0' style='font-size: 9pt; table-layout: fixed;' border='0'>

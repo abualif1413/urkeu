@@ -66,10 +66,9 @@
 						<th width="50px"></th>
 						<th width="30px">No.</th>
 						<th width="80px">Tanggal</th>
-						<th width="200px">No. Berkas</th>
+						<th width="150px">No. Berkas</th>
 						<th>Uraian</th>
 						<th>Pegawai YBS</th>
-						<th width="150px">Pegawai YBS</th>
 					</tr>
 				</thead>
 				<tbody>

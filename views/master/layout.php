@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Urkeu</title>
-	<link href="../views/Lumino Admin Bootstrap Template/lumino/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../views/lumino_admin_bootstrap_template/lumino/css/bootstrap.min.css" rel="stylesheet">
 	<link href="../views/Lumino Admin Bootstrap Template/lumino/css/font-awesome.min.css" rel="stylesheet">
 	<link href="../views/Lumino Admin Bootstrap Template/lumino/css/datepicker3.css" rel="stylesheet">
 	<link href="../views/Lumino Admin Bootstrap Template/lumino/css/styles.css" rel="stylesheet">
