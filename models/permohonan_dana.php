@@ -529,7 +529,11 @@
 					LEFT JOIN t_pegawai b ON a.id_pegawai_ybs = b.id
 				WHERE
 					1=1 AND a.tanggal BETWEEN '" . $tgl_dari . "' AND '" . $tgl_sampai . "' AND
-					(a.keterangan LIKE '%" . $uraian . "%' OR REPLACE(b.nama_pegawai,' ','') LIKE '%" . $uraian . "%')
+					(
+						a.keterangan LIKE '%" . $uraian . "%'
+						OR REPLACE(b.nama_pegawai,' ','') LIKE '%" . $uraian . "%'
+						OR a.na_nomor LIKE '%" . $uraian . "%'
+					)
 					" . $whr . "
 				ORDER BY
 					a.tanggal ASC, a.nomor ASC

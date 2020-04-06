@@ -46,7 +46,9 @@
 			$tbl .= "<td>" . $rinci->no_faktur . "</td>";
 			$tbl .= "<td align='right'>" . number_format($rinci->jumlah, 2, ".", ",") . "</td>";
 			$tbl .= "<td align='right'>" . number_format($rinci->ppn, 2, ".", ",") . "</td>";
+			$tbl .= "<td align='right'>" . number_format($rinci->jumlah + $rinci->ppn, 2, ".", ",") . "</td>";
 			$tbl .= "<td align='right'>" . number_format($rinci->pph, 2, ".", ",") . "</td>";
+			$tbl .= "<td align='right'>" . number_format($rinci->jumlah - $rinci->pph, 2, ".", ",") . "</td>";
 		$tbl .= "</tr>";
 	}
 	
@@ -65,7 +67,9 @@
 			$tbl .= "<td></td>";
 			$tbl .= "<td align='right'>" . number_format($total_jumlah_normatif, 2, ".", ",") . "</td>";
 			$tbl .= "<td align='right'>" . number_format($total_ppn_normatif, 2, ".", ",") . "</td>";
+			$tbl .= "<td align='right'>" . number_format($total_jumlah_normatif + $total_ppn_normatif, 2, ".", ",") . "</td>";
 			$tbl .= "<td align='right'>" . number_format($total_pph_normatif, 2, ".", ",") . "</td>";
+			$tbl .= "<td align='right'>" . number_format($total_jumlah_normatif - $total_pph_normatif, 2, ".", ",") . "</td>";
 		$tbl .= "</tr>";
 	}
 	
@@ -73,11 +77,21 @@
 		$tbl .= "<td align='center' colspan='5'>JUMLAH RINCIAN</td>";
 		$tbl .= "<td align='right'>" . number_format($total_jumlah, 2, ".", ",") . "</td>";
 		$tbl .= "<td align='right'>" . number_format($total_ppn, 2, ".", ",") . "</td>";
+		$tbl .= "<td align='right'>" . number_format($total_jumlah + $total_ppn, 2, ".", ",") . "</td>";
 		$tbl .= "<td align='right'>" . number_format($total_pph, 2, ".", ",") . "</td>";
+		$tbl .= "<td align='right'>" . number_format($total_jumlah - $total_pph, 2, ".", ",") . "</td>";
 	$tbl .= "</tr>";
 	$tbl .= "<tr style='font-weight: bold;'>";
-		$tbl .= "<td align='center' colspan='6'>JUMLAH YANG DIBAYARKAN SELURUHNYA</td>";
-		$tbl .= "<td align='right' colspan='2'>" . number_format($total_jumlah + $total_ppn + $total_pph, 2, ".", ",") . "</td>";
+		$tbl .= "<td align='center' colspan='7'>JUMLAH YANG DIBAYARKAN BRUTTO</td>";
+		$tbl .= "<td align='right'>" . number_format($total_jumlah + $total_ppn, 2, ".", ",") . "</td>";
+		$tbl .= "<td></td>";
+		$tbl .= "<td></td>";
+	$tbl .= "</tr>";
+	$tbl .= "<tr style='font-weight: bold;'>";
+		$tbl .= "<td align='center' colspan='7'>JUMLAH YANG DIBAYARKAN NETTO</td>";
+		$tbl .= "<td></td>";
+		$tbl .= "<td></td>";
+		$tbl .= "<td align='right'>" . number_format($total_jumlah - $total_pph, 2, ".", ",") . "</td>";
 	$tbl .= "</tr>";
 	
 	$cetak = "
@@ -128,22 +142,24 @@
 			Yang bertanda tangan dibawah ini Kuasa Pengguna Anggaran (KPA) Satuan Kerja Rumah Sakit Bhayangkara Tk II Medan, Menyatakan bahwa saya
 			bartanggung jawab penuh atas segala pengeluaran yang telah dibayar lunas oleh Bendahara Pengeluaran kepada yang berhak menerima dengan perincian sebagai berikut
 		</span><br /><br />
-		<table width='100%' border='1' cellspacing='0' cellpadding='1' style='border-collapse: collapse; font-size: 8pt;'>
+		<table width='100%' border='1' cellspacing='0' cellpadding='1' style='border-collapse: collapse; font-size: 7pt;'>
 			<thead>
 				<tr align='center'>
 					<th rowspan='2'>No.</th>
 					<th rowspan='2'>PENERIMA</th>
 					<th rowspan='2'>URAIAN</th>
-					<th colspan='2'>BUKTI FAKTUR</th>
-					<th rowspan='2'>JUMLAH</th>
+					<th colspan='5'>BUKTI FAKTUR</th>
 					<th colspan='2'>Pajak Dipungut Bendahara<br />Pengeluaran</th>
 				</tr>
 				<tr align='center'>
 					<th>TANGGAL</th>
 					<th>NOMOR</th>
-					
+					<th>TAGIHAN</th>
 					<th>PPN</th>
+					<th>JUMLAH</th>
+					
 					<th>PPh</th>
+					<th>JML. BAYAR</th>
 				</tr>
 			</thead>
 			<tbody>
