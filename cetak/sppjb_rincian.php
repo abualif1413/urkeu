@@ -45,6 +45,9 @@
 	else
 		$tulisan_nrp_diketahui = "NIK";
 	
+	$tulisan_diketahui = ($record["id_jenis_pegawai_diketahui"] == "") ? "" : "Diketahui Oleh";
+	
+	
 	$tbl = "";
 	$no = 0;
 	$total_jumlah = 0;
@@ -157,59 +160,51 @@
 						</tbody>
 					</table>
 					<br />
-				
-				
+					<table width='100%' cellspacing='0' cellpadding='0' style='font-size: 9pt; table-layout: fixed; page-break-inside:avoid;' border='0'>
+						<tr>
+							<td align='center'>" . $tulisan_diketahui . "</td>
+							<td align='center'>Medan, " . tanggal_indonesia_panjang($record["tanggal"]) . "</td>
+						</tr>
+						<tr>
+							<td align='center' style='font-weight: bold;'>" . $record["jabatan_diketahui"] . "</td>
+							<td align='center' style='font-weight: bold;'>" . $record["jabatan"] . "</td>
+						</tr>
+						<tr>
+							<td style='height: 1.5cm;'></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $record["nama_pegawai_diketahui"] . "</td>
+							<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $record["nama_pegawai"] . "</td>
+						</tr>
+						<tr>
+							<td align='center' style=''>" . strtoupper($record["pangkat_diketahui"]) . " " . $tulisan_nrp_diketahui . " " . $record["nik_diketahui"] . "</td>
+							<td align='center' style=''>" . strtoupper($record["pangkat"]) . " " . $tulisan_nrp . " " . $record["nik"] . "</td>
+						</tr>
+					</table>
 					<br />
-					<div style='page-break-inside: avoid;'>
-						<table width='100%' cellspacing='0' cellpadding='0' style='font-size: 9pt; table-layout: fixed;' border='0'>
-							<tr>
-								<td align='center'>Diketahui Oleh</td>
-								<td align='center'>Medan, " . tanggal_indonesia_panjang($record["tanggal"]) . "</td>
-							</tr>
-							<tr>
-								<td align='center' style='font-weight: bold;'>" . $record["jabatan_diketahui"] . "</td>
-								<td align='center' style='font-weight: bold;'>" . $record["jabatan"] . "</td>
-							</tr>
-							<tr>
-								<td style='height: 70px'></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $record["nama_pegawai_diketahui"] . "</td>
-								<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $record["nama_pegawai"] . "</td>
-							</tr>
-							<tr>
-								<td align='center' style=''>" . strtoupper($record["pangkat_diketahui"]) . " " . $tulisan_nrp_diketahui . " " . $record["nik_diketahui"] . "</td>
-								<td align='center' style=''>" . strtoupper($record["pangkat"]) . " " . $tulisan_nrp . " " . $record["nik"] . "</td>
-							</tr>
-						</table>
-						<br />
-					
-					
-						<br />
-						<table width='100%' cellspacing='0' cellpadding='0' style='font-size: 9pt; table-layout: fixed;' border='0'>
-							<tr>
-								<td align='center'>Menyetujui</td>
-								<td align='center' width='300px'>Mengetahui</td>
-							</tr>
-							<tr>
-								<td align='center' style='font-weight: bold;' valign='top'>" . $konf_wkpa["judul_ttd"] . "</td>
-								<td align='center' style='font-weight: bold;' valign='top'>" . $konf_kpa["judul_ttd"] . "</td>
-							</tr>
-							<tr>
-								<td style='height: 70px'></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $konf_wkpa["nama_pegawai"] . "</td>
-								<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $konf_kpa["nama_pegawai"] . "</td>
-							</tr>
-							<tr>
-								<td align='center'>" . $konf_wkpa["pangkat"] . " " . $konf_wkpa["sebutan_nrp"] . " " . $konf_wkpa["nik"] . "</td>
-								<td align='center'>" . $konf_kpa["pangkat"] . " " . $konf_kpa["sebutan_nrp"] . " " . $konf_kpa["nik"] . "</td>
-							</tr>
-						</table>
-					</div>
+					<table width='100%' cellspacing='0' cellpadding='0' style='font-size: 9pt; table-layout: fixed; page-break-inside:avoid;' border='0'>
+						<tr>
+							<td align='center'>Menyetujui</td>
+							<td align='center' width='300px'>Mengetahui</td>
+						</tr>
+						<tr>
+							<td align='center' style='font-weight: bold;' valign='top'>" . $konf_wkpa["judul_ttd"] . "</td>
+							<td align='center' style='font-weight: bold;' valign='top'>" . $konf_kpa["judul_ttd"] . "</td>
+						</tr>
+						<tr>
+							<td style='height: 1.5cm;'></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $konf_wkpa["nama_pegawai"] . "</td>
+							<td align='center' style='font-weight: bold; text-decoration: underline;'>" . $konf_kpa["nama_pegawai"] . "</td>
+						</tr>
+						<tr>
+							<td align='center'>" . $konf_wkpa["pangkat"] . " " . $konf_wkpa["sebutan_nrp"] . " " . $konf_wkpa["nik"] . "</td>
+							<td align='center'>" . $konf_kpa["pangkat"] . " " . $konf_kpa["sebutan_nrp"] . " " . $konf_kpa["nik"] . "</td>
+						</tr>
+					</table>
 					<br />
 				
 				

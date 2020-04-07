@@ -183,7 +183,7 @@
 				<td align='center' style='font-weight: bold;' valign='top'>" . $konf_kaurkeu["judul_ttd"] . "</td>
 			</tr>
 			<tr>
-				<td style='height: 70px'></td>
+				<td style='height: 1.5cm;'></td>
 				<td></td>
 			</tr>
 			<tr>
