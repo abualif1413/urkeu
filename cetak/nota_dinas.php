@@ -140,6 +140,7 @@
 				<ol style='list-style-type: lower-alpha;'>
 					<li>Dipa badan layanan umum TA. " . $ta[0] . " Rumkit Bhayangkara TK. II Medan Revisi Ke 01 dengan Nomor : SP DIPA-" . $dipa["nilai"] . " Tanggal " . tanggal_indonesia_panjang($dipa["tgl_berlaku"]) . ".</li>
 					<li>Renja TA. " . $ta[0] . "</li>
+					<li>Keputusan Menteri Keuangan Republik Indonesia No.680/KMK.05/2016 Tentang penetapan Rumah Sakit Bhayangkara Tk II Medan sebagai Instansi PK BLU</li>
 				</ol>
 			</li>
 			<li style='text-align: justify; margin-bottom: 10px;'>
