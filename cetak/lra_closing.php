@@ -4,17 +4,6 @@
 	include_once "../models/autoloader.php";
 	include_once "../models/terbilang.php";
 	
-	/* Cek closing : Proses pengecekan jika laporan yg dipilih adalah laporan yg telah closing */
-	$db_cek_closing = new DBConnection();
-	$db_cek_closing->perintahSQL = "SELECT DISTINCT tahun FROM itbl_main_coa_closing WHERE tahun = ?";
-	$db_cek_closing->add_parameter("i", $_GET["tahun"]);
-	$ds_cek_closing = $db_cek_closing->execute_reader();
-	foreach ($ds_cek_closing as $dscc) {
-		header("location:lra_closing.php?id_header=" . $_GET["id_header"] . "&tahun=" . $_GET["tahun"] . "&per_tgl=" . $_GET["per_tgl"]);
-	}
-	$db_cek_closing = null;
-	/* End of : Cek closing */
-	
 	//require_once "../dompdf-master/src/Dompdf.php";
 	
 	require_once '../dompdf/lib/html5lib/Parser.php';
@@ -41,10 +30,10 @@
 		SELECT
 			*
 		FROM
-			vw_coa
+			vw_coa_closing
 		WHERE
-			acc_number LIKE CONCAT((SELECT acc_number FROM vw_coa WHERE id = '" . $_GET["id_header"] . "'), '%')
-			AND id <> '" . $_GET["id_header"] . "'
+			acc_number LIKE CONCAT((SELECT acc_number FROM vw_coa_closing WHERE id = '" . $_GET["id_header"] . "' AND tahun='" . $_GET["tahun"] . "'), '%')
+			AND id <> '" . $_GET["id_header"] . "' AND tahun = '" . $_GET["tahun"] . "';
 	";
 	$isi_pagu = $db_isi_pagu->execute_reader();
 	$isi = "";
@@ -60,21 +49,23 @@
 		$dari = substr($sampai, 0, 7) . "-01";
 		$awal_tahun = substr($sampai, 0, 4) . "-01-01";
 		
-		$ispg["jumlah"] = PaguService::GetTotalAnggaran($ispg["id"], $_GET["tahun"]);
+		$ispg["jumlah"] = PaguService::GetTotalAnggaranClosing($ispg["id"], $_GET["tahun"]);
 		
 		// Mencari realisasi
 		$db_realisasi = new DBConnection();
 		$db_realisasi->perintahSQL = "
 			SELECT
-			func_realisasi_pagu(?, ?, ?) AS saat_ini,
-			func_realisasi_pagu(?, DATE_ADD(?,INTERVAL -1 DAY), ?) AS bulan_lalu
+			func_realisasi_pagu_closing(?, ?, ?, ?) AS saat_ini,
+			func_realisasi_pagu_closing(?, DATE_ADD(?,INTERVAL -1 DAY), ?, ?) AS bulan_lalu
 		";
 		$db_realisasi->add_parameter("s", $dari);
 		$db_realisasi->add_parameter("s", $sampai);
 		$db_realisasi->add_parameter("i", $ispg["id"]);
+		$db_realisasi->add_parameter("i", $_GET["tahun"]);
 		$db_realisasi->add_parameter("s", $awal_tahun);
 		$db_realisasi->add_parameter("s", $dari);
 		$db_realisasi->add_parameter("i", $ispg["id"]);
+		$db_realisasi->add_parameter("i", $_GET["tahun"]);
 		$ds_realisasi = $db_realisasi->execute_reader();
 		$db_realisasi = null;
 		

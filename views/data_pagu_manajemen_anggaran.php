@@ -71,7 +71,9 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Rincian Pagu</div>
 			<div class="panel-body">
-				
+				{% if closing == 1 %}
+					<div class="alert alert-warning"><strong><i class="fa fa-warning"></i> Sudah Closing!</strong> Data pagu pada tahun ini telah closing dan tidak dapat diubah lagi</div>
+				{% endif %}
 				<table class="table table-condensed table-striped tbl-coa">
 					<thead class="bg-warning">
 						<tr>
@@ -90,7 +92,11 @@
 									<td class="text-right">{{ isi.qty|number_format(2, ".", ",") }}</td>
 									<td>{{ isi.satuan }}</td>
 									<td class="text-right">{{ isi.jumlah|number_format(0, ".", ",") }},-</td>
-									<td><button class="btn btn-xs btn-primary btn-block" onclick="go_anggaran({{ isi.id }});"><i class="fa fa-tags"></i></button></td>
+									<td>
+										{% if closing == 0 %}
+											<button class="btn btn-xs btn-primary btn-block" onclick="go_anggaran({{ isi.id }});"><i class="fa fa-tags"></i></button>
+										{% endif %}
+									</td>
 								{% else %}
 									<td></td>
 									<td></td>

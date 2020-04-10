@@ -84,6 +84,9 @@
 					<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-file"></i> Cetak LRA</button>
 				</form>
 				<hr />
+				{% if closing == 1 %}
+					<div class="alert alert-warning"><strong><i class="fa fa-warning"></i> Sudah Closing!</strong> Data pagu pada tahun ini telah closing dan tidak dapat diubah lagi</div>
+				{% endif %}
 				<table class="table table-condensed table-striped tbl-coa">
 					<thead class="bg-warning">
 						<tr>

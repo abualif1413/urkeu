@@ -124,10 +124,46 @@
 					itbl_main_coa a
 					LEFT JOIN itbl_apps_anggaran b ON (a.id = b.id_coa AND b.tahun = ?)
 				WHERE
-					a.acc_number LIKE CONCAT(
-						(SELECT acc_number FROM itbl_main_coa WHERE id = ?)
-					,'%')
+					(
+						a.acc_number LIKE CONCAT(
+							(SELECT acc_number FROM itbl_main_coa WHERE id = ?)
+						,'.%')
+						OR a.id=?
+					)
 			";
+			$db->add_parameter("i", $tahun);
+			$db->add_parameter("i", $id_coa_pagu);
+			$db->add_parameter("i", $id_coa_pagu);
+			$ds = $db->execute_reader();
+			$db = null;
+			$jumlah = 0;
+			foreach ($ds as $set) {
+				$jumlah += $set["jumlah"];
+			}
+			
+			return $jumlah;
+		}
+		
+		static function GetTotalAnggaranClosing($id_coa_pagu, $tahun) {
+			$db = new DBConnection();
+			$db->perintahSQL = "
+				SELECT
+					a.id, a.acc_number, a.acc_name, COALESCE(b.jumlah, 0) AS jumlah
+				FROM
+					itbl_main_coa_closing a
+					LEFT JOIN itbl_apps_anggaran b ON (a.id = b.id_coa AND b.tahun = ?)
+				WHERE
+					a.tahun = ? AND
+					(
+						a.acc_number LIKE CONCAT(
+							(SELECT acc_number FROM itbl_main_coa_closing WHERE id = ? AND tahun = ?)
+						,'.%')
+						OR a.id=?
+					)
+			";
+			$db->add_parameter("i", $tahun);
+			$db->add_parameter("i", $tahun);
+			$db->add_parameter("i", $id_coa_pagu);
 			$db->add_parameter("i", $tahun);
 			$db->add_parameter("i", $id_coa_pagu);
 			$ds = $db->execute_reader();
