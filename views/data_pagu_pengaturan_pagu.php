@@ -45,6 +45,7 @@
 				$("#save").removeAttr("disabled");
 				$("#save").removeClass("btn-default");
 				$("#save").addClass("btn-primary");
+				window.scrollTo(0, 100);
 			});
 		}
 		
