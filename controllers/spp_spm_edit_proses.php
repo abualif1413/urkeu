@@ -34,7 +34,7 @@
 			if($_GET["jenis_belanja"] == "belanja barang" || $_GET["jenis_belanja"] == "belanja perjalanan dinas" ||
 				$_GET["jenis_belanja"] == "belanja pemeliharaan" || $_GET["jenis_belanja"] == "belanja pengadaan") {
 					$db_pecah_bayar = new DBConnection();
-					$db_pecah_bayar->perintahSQL = "SELECT *, (bruto + ppn + pph) AS total FROM t_permohonan_dana_pembayaran WHERE id_belanja_barang = ?";
+					$db_pecah_bayar->perintahSQL = "SELECT *, (bruto + ppn) AS total FROM t_permohonan_dana_pembayaran WHERE id_belanja_barang = ?";
 					$db_pecah_bayar->add_parameter("i", $_GET["id"]);
 					$pembayaran = $db_pecah_bayar->execute_reader();
 					$data_belanja["pembayaran"] = $pembayaran;

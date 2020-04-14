@@ -50,6 +50,9 @@
     				isi_total += "<td colspan='2' class='bg-info'>Pembayaran telah dipecah menjadi " + r.pembayaran.length + ". Pilih yang akan dibayar</td>";
     				$.each(r.pembayaran, function(k, v) {
     					var format_total = accounting.formatMoney(v.total, "Rp ", 0);
+    					var format_bruto = accounting.formatMoney(v.bruto, "Rp ", 0);
+    					var format_ppn = accounting.formatMoney(v.ppn, "Rp ", 0);
+    					var format_pph = accounting.formatMoney(v.pph, "Rp ", 0);
     					
     					if(v.id == id_pecah_bayar) {
     						$("#total_belanja").val(v.total);
@@ -67,7 +70,7 @@
 	    							isi_total += "<input type='radio' name='pecah_bayar' value='" + v.id + "' id='pecah_" + v.id + "' total='" + v.total + "' onclick='pilih_pecah_bayar(" + v.id + ", " + v.total + ")' />";
 	    						isi_total += "</td>";
 	    						isi_total += "<td>";
-	    							isi_total += "<b>" + format_total + "</b>";
+	    							isi_total += "<b>" + format_total + " (Tagihan: " + format_bruto + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PPN: " + format_ppn + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PPh: " + format_pph + ")</b>";
 	    						isi_total += "</td>";
 	    					isi_total += "</tr>";
     					}

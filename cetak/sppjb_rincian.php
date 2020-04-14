@@ -54,7 +54,8 @@
 	$total_ppn = 0;
 	$total_pph = 0;
 	foreach ($rincian as $rinci) {
-		$total_jumlah += ($rinci->jumlah + $rinci->ppn + $rinci->pph);
+		//$total_jumlah += ($rinci->jumlah + $rinci->ppn + $rinci->pph);
+		$total_jumlah += ($rinci->jumlah + $rinci->ppn);
 		$no++;
 		$tbl .= "<tr>";
 			$tbl .= "<td align='right'>" . $no . "</td>";
@@ -62,7 +63,8 @@
 			$tbl .= "<td align='right'>" . $rinci->qty . "</td>";
 			$tbl .= "<td>" . $rinci->satuan . "</td>";
 			$tbl .= "<td align='right'>" . number_format($rinci->harga_satuan, 2, ".", ",") . "</td>";
-			$tbl .= "<td align='right'>" . number_format($rinci->jumlah + $rinci->ppn + $rinci->pph, 2, ".", ",") . "</td>";
+			//$tbl .= "<td align='right'>" . number_format($rinci->jumlah + $rinci->ppn + $rinci->pph, 2, ".", ",") . "</td>";
+			$tbl .= "<td align='right'>" . number_format($rinci->jumlah + $rinci->ppn, 2, ".", ",") . "</td>";
 			$tbl .= "<td align='right'></td>";
 		$tbl .= "</tr>";
 	}

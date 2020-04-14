@@ -30,7 +30,8 @@
 	
 	$jumlah_total = 0;
 	foreach ($rincian as $rinci) {
-		$jumlah = $rinci->jumlah + $rinci->ppn + $rinci->pph;
+		//$jumlah = $rinci->jumlah + $rinci->ppn + $rinci->pph;
+		$jumlah = $rinci->jumlah + $rinci->ppn;
 		$jumlah_total += $jumlah;
 	}
 	
@@ -38,7 +39,8 @@
 		$total_jumlah_normatif = $normatif["jumlah_dibayarkan"];
 		$total_ppn_normatif = 0;
 		$total_pph_normatif = $normatif["pph"];
-		$jumlah_total += $total_jumlah_normatif + $total_ppn_normatif + $total_pph_normatif;
+		//$jumlah_total += $total_jumlah_normatif + $total_ppn_normatif + $total_pph_normatif;
+		$jumlah_total += $total_jumlah_normatif + $total_ppn_normatif;
 	}
 		
 	

@@ -52,7 +52,12 @@
 	$jumlah_total = 0;
 	$tbl_rincian = "<table width='90%' cellspacing='0' cellpadding='0' style='font-size: 11pt;'>";
 		foreach ($rincian as $rinci) {
-			$jumlah = $rinci->jumlah + $rinci->ppn + $rinci->pph;
+			/* Modul lama, dimana isinya ditambah semua */
+			//$jumlah = $rinci->jumlah + $rinci->ppn + $rinci->pph;
+			
+			/* Modul baru sekarang hanya jumlah bruto (jumlah + ppn) */
+			$jumlah = $rinci->jumlah + $rinci->ppn;
+			
 			$jumlah_total += $jumlah;
 			
 			$tbl_rincian .= "<tr>";
@@ -66,7 +71,9 @@
 			$total_jumlah_normatif = $normatif["jumlah_dibayarkan"];
 			$total_ppn_normatif = 0;
 			$total_pph_normatif = $normatif["pph"];
-			$jumlah_total += $total_jumlah_normatif + $total_ppn_normatif + $total_pph_normatif;
+			
+			//$jumlah_total += $total_jumlah_normatif + $total_ppn_normatif + $total_pph_normatif;
+			$jumlah_total += $total_jumlah_normatif + $total_ppn_normatif;
 		}
 		
 		$tbl_rincian .= "<tr><td colspan='3' style='border-bottom: solid 1px black;'></td></tr>";

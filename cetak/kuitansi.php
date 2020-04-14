@@ -49,7 +49,8 @@
 	
 	$jumlah_total = 0;
 	foreach ($rincian as $rinci) {
-		$jumlah = $rinci->jumlah + $rinci->ppn + $rinci->pph;
+		//$jumlah = $rinci->jumlah + $rinci->ppn + $rinci->pph;
+		$jumlah = $rinci->jumlah + $rinci->ppn;
 		$jumlah_total += $jumlah;
 	}
 	
