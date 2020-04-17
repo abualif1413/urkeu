@@ -69,20 +69,25 @@
 	<div class="panel panel-primary">
 		<div class="panel-heading">Data SPP/SPM</div>
 		<div class="panel-body">
-			<table width="100%" class="table table-condensed table-striped table-hover" cellspacing="0" cellpadding="0" style="font-size: 85%;">
+			<table width="100%" class="table table-condensed table-striped table-hover" cellspacing="0" cellpadding="0" style="font-size: 80%;">
 				<thead>
 					<tr class="bg-primary">
-						<th width="50px"></th>
-						<th width="50px"></th>
-						<th width="50px"></th>
-						<th width="50px"></th>
-						<th width="30px">No.</th>
-						<th width="100px">No. SPP/SPM</th>
-						<th width="100px">No. SPBy</th>
-						<th width="80px">Tanggal SPP/SPM</th>
-						<th width="120px">Jenis Belanja</th>
-						<th>Uraian</th>
-						<th width="100px">Total</th>
+						<th width="50px" rowspan="2"></th>
+						<th width="50px" rowspan="2"></th>
+						<th width="50px" rowspan="2"></th>
+						<th width="50px" rowspan="2"></th>
+						<th width="30px" rowspan="2">No.</th>
+						<th width="100px" rowspan="2">No. SPP/SPM</th>
+						<th width="100px" rowspan="2">No. SPBy</th>
+						<th width="80px" rowspan="2">Tanggal SPP/SPM</th>
+						<th width="120px" rowspan="2">Jenis Belanja</th>
+						<th rowspan="2">NA</th>
+						<th width="100px" rowspan="2" style="text-align: right;">Total</th>
+						<th colspan="2" style="text-align: right;">Pajak</th>
+					</tr>
+					<tr class="bg-primary">
+						<th width="100px" style="text-align: right;">PPN</th>
+						<th width="100px" style="text-align: right;">PPh</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -103,8 +108,23 @@
 							<td align="center">{{ data.nomor_spby }}</td>
 							<td align="center">{{ data.tanggal|date("d-m-Y") }}</td>
 							<td align="left">{{ data.jenis_belanja }}</td>
-							<td><strong>{{ data.nomor_belanja }}</strong><br />{{ data.keterangan }}</td>
+							<!--<td><strong>{{ data.nomor_belanja }}</strong><br />{{ data.keterangan }}</td>-->
+							<td>
+								<strong>
+									<a href="javascript:void(0);"
+										data-toggle="popover"
+										data-content="{{ data.keterangan }}<hr /><button type='button' class='btn btn-xs btn-primary'>Cetak N/A</button> <button type='button' class='btn btn-xs btn-primary'>Cetak SPTJB Rincian</button>"
+										data-html="true"
+										data-placement="top"
+										data-trigger="click"
+										data-container="body" title="Keterangan">
+										{{ data.nomor_belanja }}
+									</a>
+								</strong>
+							</td>
 							<td align="right">{{ data.total|number_format(2, ",", ".") }}</td>
+							<td align="right">{{ data.ppn|number_format(2, ",", ".") }}</td>
+							<td align="right">{{ data.pph|number_format(2, ",", ".") }}</td>
 						</tr>
 					{% endfor %}
 				</tbody>

@@ -22,8 +22,8 @@
 		FROM
 			vw_coa
 		WHERE
-			acc_number LIKE CONCAT((SELECT acc_number FROM vw_coa WHERE id = '" . $_GET["id_header"] . "'), '%')
-			AND id <> '" . $_GET["id_header"] . "'
+			acc_number LIKE CONCAT((SELECT acc_number FROM vw_coa WHERE id = '5'), '%')
+			AND id <> '5'
 	";
 	$isi_pagu = $db_isi_pagu->execute_reader();
 	$db_isi_pagu = null;

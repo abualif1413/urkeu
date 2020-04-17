@@ -173,6 +173,7 @@
 					$sql_baru .= substr($this->perintahSQL, $i, 1);
 				}
 			}
+			
 			$res = mysqli_query($app_conn, $sql_baru) or die(mysqli_error($app_conn) . "<br /><pre>" . $this->perintahSQL . "</pre>");
 			$rs = array();
 			while($ds = mysqli_fetch_assoc($res)) {

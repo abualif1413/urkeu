@@ -22,6 +22,10 @@
 	require_once '../dompdf/lib/php-svg-lib/src/autoload.php';
 	require_once '../dompdf/src/Autoloader.php';
 	Dompdf\Autoloader::register();
+	
+	// Link cetak rincian realisasi
+	//$link_realisasi = $_SERVER['HTTP_REFERER'];
+	$link_realisasi = ($_SERVER["HTTPS"]) ? ("https://" . $_SERVER['SERVER_NAME'] . "/urkeu/cetak/rincian_lra.php") : ("http://" . $_SERVER["SERVER_NAME"] . "/urkeu/cetak/rincian_lra.php");
 
 	// reference the Dompdf namespace
 	use Dompdf\Dompdf;
@@ -104,9 +108,9 @@
 				<td style='padding-left: " . $padding . "px; border-color: black;'>" . $ispg["acc_name"] . "</td>
 				<td align='right' style='border-color: black;'>" . number_format($ispg["jumlah"], 2) . "</td>
 				<td align='right' style='border-color: black;'>" . number_format($ispg["jumlah"], 2) . "</td>
-				<td align='right' style='border-color: black;'>" . number_format($ispg["bulan_lalu"], 2) . "</td>
+				<td align='right' style='border-color: black;'><a style='color: " . $warna[$level] . "' href='" . $link_realisasi . "?dari=" . $awal_tahun . "&sampai=" . $dari . "&id_coa=" . $ispg["id"] . "&bln_lalu=1' target='_blank'>" . number_format($ispg["bulan_lalu"], 2) . "</a></td>
 				<td align='right' style='border-color: black;'>" . number_format($ispg["persentase_bulan_lalu"], 2) . "</td>
-				<td align='right' style='border-color: black;'>" . number_format($ispg["saat_ini"], 2) . "</td>
+				<td align='right' style='border-color: black;'><a style='color: " . $warna[$level] . "' href='" . $link_realisasi . "?dari=" . $dari . "&sampai=" . $sampai . "&id_coa=" . $ispg["id"] . "&bln_lalu=0' target='_blank'>" . number_format($ispg["saat_ini"], 2) . "</a></td>
 				<td align='right' style='border-color: black;'>" . number_format($ispg["persentase_saat_ini"], 2) . "</td>
 				<td align='right' style='border-color: black;'>" . number_format($ispg["jumlah_realisasi"], 2) . "</td>
 				<td align='right' style='border-color: black;'>" . number_format($ispg["persentase_jumlah_realisasi"], 2) . "</td>

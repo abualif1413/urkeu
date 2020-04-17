@@ -98,6 +98,7 @@
 			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
 	";
 	$ds_nomor_buku = $db_nomor_buku->execute_reader();
+	unset($db_nomor_buku);
 	$nomor_buku = 0;
 	foreach ($ds_nomor_buku as $dsnb) {
 		if($dsnb["jenis"] != "pu") {
@@ -225,6 +226,7 @@
 			tanggal ASC, tipe ASC, urutan ASC
 	";
 	$ds_buku = $db_utama->execute_reader();
+	unset($db_utama);
 	
 	$isi = "";
 	$no = $nomor_buku;

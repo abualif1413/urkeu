@@ -127,12 +127,13 @@
 			global $app_conn;
 			
 			$whr = "";			
-			$whr .= " a.tanggal_after_sp2d BETWEEN '" . $dari . " 00:00:00' AND '" . $sampai . " 23:59:59' AND (a.keterangan LIKE '%" . $uraian . "%' OR a.nomor_na LIKE '%" . $uraian . "%') ";
+			//$whr .= " a.tanggal_after_sp2d BETWEEN '" . $dari . " 00:00:00' AND '" . $sampai . " 23:59:59' AND (a.keterangan LIKE '%" . $uraian . "%' OR a.nomor_na LIKE '%" . $uraian . "%') ";
+			$whr .= " a.tanggal BETWEEN '" . $dari . " 00:00:00' AND '" . $sampai . " 23:59:59' AND (a.keterangan LIKE '%" . $uraian . "%' OR a.nomor_na LIKE '%" . $uraian . "%') ";
 			
 			$sql = "
 				SELECT
 					a.id, a.nomor, a.tanggal,
-					a.jenis_belanja, a.keterangan, a.total, a.nomor_na AS nomor_belanja,
+					a.jenis_belanja, a.keterangan, a.total, a.ppn, a.pph, a.nomor_na AS nomor_belanja,
 					COALESCE(c.id, 0) AS id_pu_detail,
 					d.nomor AS nomor_spby, d.tanggal AS tgl_spby
 				FROM
@@ -160,7 +161,7 @@
 			$sql = "
 				SELECT
 					a.id, a.nomor, a.tanggal,
-					a.jenis_belanja, a.keterangan, a.total, a.nomor_na AS nomor_belanja,
+					a.jenis_belanja, a.keterangan, a.total, a.ppn, a.pph, a.nomor_na AS nomor_belanja,
 					COALESCE(c.id, 0) AS id_pu_detail,
 					d.nomor AS nomor_spby, d.tanggal AS tgl_spby
 				FROM

@@ -7,7 +7,7 @@
 		window.close();
 	}
 </script>
-<form method="get" action="" style="padding: 20px;">
+<!--<form method="get" action="" style="padding: 20px;">
 	<div class="row">
 		<div class="col-sm-11">
 			<select class="form-control" pilihan="0" name="id_header" id="id_header">
@@ -25,7 +25,7 @@
 			<button class="btn btn-primary btn-block" type="submit" onclick=""><i class="fa fa-search"></i> OK</button>
 		</div>
 	</div>
-</form>
+</form>-->
 <table class="table table-condensed table-striped table-hover tbl-coa">
 	<thead>
 		<tr>

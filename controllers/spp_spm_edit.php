@@ -18,8 +18,7 @@
 		$data = SPPSPM::GetList01($_GET["tgl_dari"], $_GET["tgl_sampai"], $_GET["uraian"]);
 		echo "01";
 	}
-	elseif (isset($_GET["scan_barcode"]))
- {
+	elseif (isset($_GET["scan_barcode"])){
 		$data = SPPSPM::GetList02($_GET["scan_barcode"]);
 		echo "02";
 	}
