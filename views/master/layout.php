@@ -160,6 +160,7 @@
 					<li><a class="" href="pengeluaran_lain.php"><span class="fa fa-external-link-square">&nbsp;</span> Pengeluaran Lain</a></li>
 					<li><a class="" href="pu_lain.php"><span class="fa fa-external-link-square">&nbsp;</span> PU Lain</a></li>
 					<li><a class="" href="setor_pajak_list.php"><span class="fa fa-money">&nbsp;</span> Penyetoran pajak</a></li>
+					<li><a class="" href="jasa_giro.php"><span class="fa fa-external-link-square">&nbsp;</span> Jasa Giro</a></li>
 					<li><a class="" href="lap_pu_dan_transaksi.php"><span class="fa fa-book">&nbsp;</span> Lap. Transaksi</a></li>
 					<li><a class="" href="buku_kas_bank.php"><span class="fa fa-book">&nbsp;</span> Buku Kas Bank</a></li>
 					<li><a class="" href="laporan_rekening.php"><span class="fa fa-book">&nbsp;</span> Laporan Rek. Bank</a></li>

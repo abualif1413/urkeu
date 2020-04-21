@@ -31,13 +31,13 @@
 		SELECT
 			'saldo' AS jenis, 1 AS urutan, COALESCE(a.id, 0) AS id, COALESCE(a.per_tgl, '') AS tanggal,
 			'Saldo awal' AS keterangan,
-			0 AS ppn, 0 AS pph, COALESCE(SUM(a.saldo), 0) AS total
+			0 AS ppn, 0 AS pph, COALESCE(a.saldo, 0) AS total
 		FROM
 			itbl_apps_saldo_buku a
 		WHERE
 			a.per_tgl >= '" . $tanggal_pertama_tahun . "' AND a.per_tgl < '" . $tanggal . "'
 			
-		UNION ALL
+		UNION
 		
 		SELECT
 			'spp' AS jenis, 1 AS urutan, a.id, a.tanggal,
@@ -48,7 +48,7 @@
 		WHERE
 			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'pu' AS jenis, 2 AS urutan, a.id, a.tanggal,
@@ -63,7 +63,7 @@
 		GROUP BY
 			a.id
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'terima_lain' AS jenis, 3 AS urutan, a.id, a.tanggal,
@@ -74,7 +74,7 @@
 		WHERE
 			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'spby' AS jenis, 4 AS urutan, a.id_spp_spm, a.tanggal,
@@ -86,7 +86,7 @@
 		WHERE
 			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'keluar_lain' AS jenis, 5 AS urutan, a.id, a.tanggal,
@@ -96,6 +96,32 @@
 			itbl_apps_pengeluaran_lain a
 		WHERE
 			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
+			
+		UNION
+		
+		SELECT
+			'pajak' AS jenis, 6 AS urutan,
+			pajak.id, CONCAT(pajak.tanggal, ' 00:00:00') AS tanggal, pajak.keterangan,
+			SUM(
+				CASE
+					WHEN setpajak.jenis = 'ppn' THEN sppspm.ppn
+					ELSE 0
+				END
+			) AS ppn,
+			SUM(
+				CASE
+					WHEN setpajak.jenis = 'pph' THEN sppspm.pph
+					ELSE 0
+				END
+			) AS pph, 0 AS total
+		FROM
+			vw_daftar_spp_spm sppspm
+			INNER JOIN itbl_apps_penyetoran_pajak_detail setpajak ON sppspm.id = setpajak.id_spp_spm
+			INNER JOIN itbl_apps_penyetoran_pajak pajak ON setpajak.id_penyetoran_pajak = pajak.id
+		WHERE
+			pajak.tanggal >= '" . $tanggal_pertama_tahun . "' AND pajak.tanggal < '" . $tanggal . "'
+		GROUP BY
+			pajak.id
 	";
 	$ds_nomor_buku = $db_nomor_buku->execute_reader();
 	unset($db_nomor_buku);
@@ -118,7 +144,7 @@
 		WHERE
 			SUBSTR(a.per_tgl,1,7) = '" . $periode . "'
 	
-		UNION ALL
+		UNION
 		
 		SELECT
 			'spp' AS jenis, 1 AS urutan, a.id, a.tanggal,
@@ -129,7 +155,7 @@
 		WHERE
 			SUBSTR(a.tanggal,1,7) = '" . $periode . "'
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			thepu.jenis, thepu.urutan, thepu.id, thepu.tanggal,
@@ -150,7 +176,7 @@
 				GROUP BY
 					a.id
 		
-				UNION ALL
+				UNION
 		
 				SELECT
 					'pu' AS jenis, 2 AS urutan, a.id, a.tanggal,
@@ -167,7 +193,7 @@
 		GROUP BY
 			thepu.id
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'terima_lain' AS jenis, 3 AS urutan, a.id, a.tanggal,
@@ -178,7 +204,7 @@
 		WHERE
 			SUBSTR(a.tanggal,1,7) = '" . $periode . "'
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'spby' AS jenis, 4 AS urutan, a.id_spp_spm, a.tanggal,
@@ -190,7 +216,7 @@
 		WHERE
 			SUBSTR(a.tanggal,1,7) = '" . $periode . "'
 		
-		UNION ALL
+		UNION
 		
 		SELECT
 			'keluar_lain' AS jenis, 5 AS urutan, a.id, a.tanggal,
@@ -201,6 +227,31 @@
 		WHERE
 			SUBSTR(a.tanggal,1,7) = '" . $periode . "'
 				
+		UNION
+		
+		SELECT
+			'pajak' AS jenis, 6 AS urutan,
+			pajak.id, CONCAT(pajak.tanggal, ' 00:00:00') AS tanggal, pajak.keterangan,
+			SUM(
+				CASE
+					WHEN setpajak.jenis = 'ppn' THEN sppspm.ppn
+					ELSE 0
+				END
+			) AS ppn,
+			SUM(
+				CASE
+					WHEN setpajak.jenis = 'pph' THEN sppspm.pph
+					ELSE 0
+				END
+			) AS pph, 0 AS total
+		FROM
+			vw_daftar_spp_spm sppspm
+			INNER JOIN itbl_apps_penyetoran_pajak_detail setpajak ON sppspm.id = setpajak.id_spp_spm
+			INNER JOIN itbl_apps_penyetoran_pajak pajak ON setpajak.id_penyetoran_pajak = pajak.id
+		WHERE
+			SUBSTR(pajak.tanggal, 1, 7) = '" . $periode . "'
+		GROUP BY
+			pajak.id
 	";
 	
 	//echo "<pre>$sql_utama</pre>";
@@ -223,7 +274,7 @@
 			(" . $sql_utama . ") isi
 			
 		ORDER BY
-			tanggal ASC, tipe ASC, urutan ASC
+			tanggal ASC, urutan ASC, tipe ASC
 	";
 	$ds_buku = $db_utama->execute_reader();
 	unset($db_utama);
@@ -453,9 +504,9 @@
 			} elseif($dsb["jenis"] == "spby") {
 				$no++;
 				$saldo = $dsb["total"] - $dsb["ppn"] - $dsb["pph"];
-				$ppn = $dsb["ppn"];
-				$pph = $dsb["pph"];
-				$total = $dsb["total"];
+				$ppn = 0;
+				$pph = 0;
+				$total = $dsb["total"] - $dsb["ppn"] - $dsb["pph"];
 				
 				$saldo_akhir_tunai -= $total;
 				
@@ -502,6 +553,52 @@
 				$ppn = $dsb["ppn"];
 				$pph = $dsb["pph"];
 				$total = $dsb["total"];
+				
+				$saldo_akhir_tunai -= $total;
+				
+				$isi .= "
+					<tr style=' page-break-inside: avoid;'>
+						<td align='center'>" . $no . "</td>
+						<td>" . $dsb["keterangan"] . "</td>
+						
+						<td align='right'>" . number_format($saldo, 2) . "</td>
+						<td align='right'>" . number_format($ppn, 2) . "</td>
+						<td align='right'>" . number_format($pph, 2) . "</td>
+						
+						<td></td>
+						<td></td>
+						<td></td>
+						
+						<td align='right'>" . number_format($saldo_akhir_tunai, 2) . "</td>
+						<td align='right'>" . number_format($total, 2) . "</td>
+						<td></td>
+						
+						<td align='right'>" . number_format($saldo_akhir, 2) . "</td>
+						<td align='right'>-</td>
+						<td></td>
+					</tr>
+				";
+				
+				$total_debet_saldo += $saldo;
+				$total_debet_ppn += $ppn;
+				$total_debet_pph += $pph;
+				
+				//$total_kredit_saldo = 0;
+				//$total_kredit_ppn = 0;
+				//$total_kredit_pph = 0;
+				
+				$total_jumlah_tunai_debet += $total;
+				//$total_jumlah_tunai_kredit = 0;
+				
+				$total_bank_saldo += $saldo_akhir;
+				//$total_bank_debet = 0;
+				//$total_bank_kredit = 0;
+			} elseif($dsb["jenis"] == "pajak") {
+				$no++;
+				$saldo = 0;
+				$ppn = $dsb["ppn"];
+				$pph = $dsb["pph"];
+				$total = $dsb["ppn"] + $dsb["pph"];
 				
 				$saldo_akhir_tunai -= $total;
 				

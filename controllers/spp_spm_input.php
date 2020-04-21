@@ -106,7 +106,7 @@
 					a.id, b.id AS id_coa, b.acc_name, b.nomor_coa, a.nilai
 				FROM
 					itbl_apps_coa_spp_spm a
-					INNER JOIN vw_coa b ON a.id_coa_pagu = b.id
+					LEFT JOIN vw_coa b ON a.id_coa_pagu = b.id
 				WHERE
 					a.id_spp_spm IS NULL AND a.user_insert=?
 				ORDER BY

@@ -28,7 +28,7 @@
 	if($bln_lalu == 0) {
 		$db_data->perintahSQL = "
 			SELECT
-				a.nomor AS no_sppspm, a.tanggal AS tgl_sppspm, a.total AS nilai_sppspm, SUM(b.nilai) nilai_lra,
+				1 AS jenis, a.nomor AS no_sppspm, a.tanggal AS tgl_sppspm, a.total AS nilai_sppspm, SUM(b.nilai) nilai_lra,
 				d.nomor AS no_spby, d.tanggal AS tgl_spby, a.keterangan
 			FROM
 				vw_daftar_spp_spm a
@@ -44,13 +44,30 @@
 				)
 			GROUP BY
 				a.id
+			
+			UNION 
+			
+			SELECT
+				2 AS jenis, 'Jasa Giro' AS no_sppspm, jg.tanggal, jg.jumlah AS nilai_sppspm, jg.jumlah AS nilai_lra,
+				'' AS no_spby, jg.tanggal AS tgl_spby, jg.keterangan
+			FROM
+				itbl_apps_jasa_giro jg
+				LEFT JOIN itbl_main_coa coa ON jg.id_coa_pagu = coa.id
+			WHERE
+				jg.tanggal BETWEEN '" . $dari . "' AND '" . $sampai . "'
+				AND (
+					coa.acc_number LIKE CONCAT((SELECT acc_number FROM vw_coa WHERE id = " . $id_coa . "),'.%')
+					OR
+					coa.id = " . $id_coa . "
+				)
+			
 			ORDER BY
-				a.tanggal ASC, a.nomor ASC
+				tgl_sppspm ASC, no_sppspm ASC
 		";
 	} elseif ($bln_lalu == 1) {
 		$db_data->perintahSQL = "
 			SELECT
-				a.nomor AS no_sppspm, a.tanggal AS tgl_sppspm, a.total AS nilai_sppspm, SUM(b.nilai) nilai_lra,
+				1 AS jenis, a.nomor AS no_sppspm, a.tanggal AS tgl_sppspm, a.total AS nilai_sppspm, SUM(b.nilai) nilai_lra,
 				d.nomor AS no_spby, d.tanggal AS tgl_spby, a.keterangan
 			FROM
 				vw_daftar_spp_spm a
@@ -66,8 +83,25 @@
 				)
 			GROUP BY
 				a.id
+			
+			UNION 
+			
+			SELECT
+				2 AS jenis, 'Jasa Giro' AS no_sppspm, jg.tanggal, jg.jumlah AS nilai_sppspm, jg.jumlah AS nilai_lra,
+				'' AS no_spby, jg.tanggal AS tgl_spby, jg.keterangan
+			FROM
+				itbl_apps_jasa_giro jg
+				LEFT JOIN itbl_main_coa coa ON jg.id_coa_pagu = coa.id
+			WHERE
+				jg.tanggal BETWEEN '" . $dari . "' AND DATE_ADD('" . $sampai . "',INTERVAL -1 DAY)
+				AND (
+					coa.acc_number LIKE CONCAT((SELECT acc_number FROM vw_coa WHERE id = " . $id_coa . "),'.%')
+					OR
+					coa.id = " . $id_coa . "
+				)
+			
 			ORDER BY
-				a.tanggal ASC, a.nomor ASC
+				tgl_sppspm ASC, no_sppspm ASC
 		";
 	}
 	$ds_data = $db_data->execute_reader();
