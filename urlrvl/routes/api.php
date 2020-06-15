@@ -20,9 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/PengeluaranDana/TambahDetail', 'Api\PengeluaranDanaController@tambahDetail');
 Route::get('/PengeluaranDana/GetDetailTemp/{user_id}', 'Api\PengeluaranDanaController@getDetailTemp');
+Route::get('/PengeluaranDana/GetDetailList/{id_permohonan_dana}', 'Api\PengeluaranDanaController@getDetailList');
 Route::get('/PengeluaranDana/hapusDetail/{id_detail}', 'Api\PengeluaranDanaController@hapusDetail');
 Route::get('/PengeluaranDana/GetRekananPIC/{id_data_rekanan_pic}', 'Api\PengeluaranDanaController@getRekananPIC');
 
 Route::post('/PengeluaranDana/TambahDetailNormatif', 'Api\PengeluaranDanaController@tambahDetailNormatif');
 Route::get('/PengeluaranDana/GetDetailNormatifTemp/{user_id}', 'Api\PengeluaranDanaController@getDetailNormatifTemp');
+Route::get('/PengeluaranDana/GetDetailNormatifList/{id_permohonan_dana}', 'Api\PengeluaranDanaController@getDetailNormatifList');
 Route::get('/PengeluaranDana/hapusDetailNormatif/{id_detail_normatif}', 'Api\PengeluaranDanaController@hapusDetailNormatif');

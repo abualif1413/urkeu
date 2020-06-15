@@ -65,7 +65,7 @@ class PengeluaranDanaController extends Controller
     public function tambahDetailNormatif(Request $request) {
         if(!$request->normatif_id_detail) {
             $normatif = new DetailPermohonanDanaNormatif;
-            $normatif->id_belanja_honor = $request->normatif_id_belanja_honor;
+            $normatif->id_belanja_honor = $request->id_permohonan_dana;
             $normatif->id_pegawai = $request->normatif_id_pegawai;
             $normatif->jabatan_pengelola = $request->normatif_jabatan_pengelola;
             $normatif->qty = $request->normatif_qty;
@@ -74,7 +74,7 @@ class PengeluaranDanaController extends Controller
             $normatif->save();
         } else {
             $normatif = DetailPermohonanDanaNormatif::find($request->normatif_id_detail);
-            $normatif->id_belanja_honor = $request->normatif_id_belanja_honor;
+            $normatif->id_belanja_honor = $request->id_permohonan_dana;
             $normatif->id_pegawai = $request->normatif_id_pegawai;
             $normatif->jabatan_pengelola = $request->normatif_jabatan_pengelola;
             $normatif->qty = $request->normatif_qty;
@@ -140,6 +140,46 @@ class PengeluaranDanaController extends Controller
         return response()->json(["data" => $data]);
     }
 
+    public function getDetailList($id_permohonan_dana) {
+        $data = DB::select(
+            "
+                SELECT
+                    datanya.id, MAX(datanya.qty) AS qty, MAX(datanya.satuan) AS satuan,
+                    MAX(datanya.harga_satuan) AS harga_satuan, MAX(datanya.id_jenis_pajak) AS id_jenis_pajak, MAX(datanya.penerima) AS penerima,
+                    MAX(datanya.qty * datanya.harga_satuan) AS jumlah, MAX(datanya.uraian) AS uraian, MAX(datanya.user_insert) AS user_insert,
+                    MAX(datanya.jenis_pajak) AS jenis_pajak, SUM(datanya.besar_ppn) AS ppn, SUM(datanya.besar_pph) AS pph
+                FROM
+                    (
+                        SELECT
+                            a.*, b.keterangan AS jenis_pajak,
+                            COALESCE(ppn.besar, 0) AS persen_ppn, COALESCE(pph.besar, 0) AS persen_pph,
+                            @ppn := CASE
+                                WHEN (a.qty * a.harga_satuan) >= 2000000 THEN CEIL((a.qty * a.harga_satuan) / 11)
+                                ELSE 0
+                            END AS besar_ppn, 
+                            CASE
+                                WHEN (a.qty * a.harga_satuan) >= 1000000 THEN CEIL((((a.qty * a.harga_satuan) - @ppn) * 1.5 / 100))
+                                ELSE 0
+                            END AS besar_pph
+                        FROM
+                            t_detail_permohonan_dana a	
+                            LEFT JOIN m_jenis_pajak b ON a.id_jenis_pajak = b.id
+                            LEFT JOIN m_memiliki_pajak c ON b.id = c.id_jenis_pajak
+                            LEFT JOIN m_pajak ppn ON c.id_pajak = ppn.id AND ppn.tipe = 'PPN'
+                            LEFT JOIN m_pajak pph ON c.id_pajak = pph.id AND pph.tipe = 'PPh'
+                            CROSS JOIN (SELECT @ppn := 0) ppn
+                        WHERE
+                            a.id_permohonan_dana = ?
+                    ) datanya
+                GROUP BY
+                    datanya.id
+            ",
+            [$id_permohonan_dana]
+        );
+
+        return response()->json(["data" => $data]);
+    }
+
     public function getDetailNormatifTemp($userID) {
         $data = DB::select(
             "
@@ -154,6 +194,24 @@ class PengeluaranDanaController extends Controller
                     a.id ASC
             "
             , [$userID]);
+        
+        return response()->json(["data" => $data]);
+    }
+
+    public function getDetailNormatifList($id_permohonan_dana) {
+        $data = DB::select(
+            "
+                SELECT
+                    a.id, b.nama_pegawai, a.qty, a.sbu_honor
+                FROM
+                    t_detail_permohonan_dana_normatif a
+                    LEFT JOIN t_pegawai b ON a.id_pegawai = b.id
+                WHERE
+                    a.id_belanja_honor = ?
+                ORDER BY
+                    a.id ASC
+            "
+            , [$id_permohonan_dana]);
         
         return response()->json(["data" => $data]);
     }

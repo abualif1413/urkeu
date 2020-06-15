@@ -146,6 +146,8 @@
 		$obj->diketahui_oleh_riwayat = $diketahui_oleh[1];
 		$obj->kuasa_pengguna_anggaran_riwayat = $kuasa_pengguna_anggaran[1];
 		
+		$obj->id_data_rekanan_pic = $_POST["id_data_rekanan_pic"];
+		
 		$obj->no_sptjb = $_POST["no_sptjb"];
 		$obj->jenis_belanja = $_POST["jenis_belanja"];
 		$obj->menyatakan = $_POST["menyatakan"];
@@ -184,6 +186,35 @@
 	$obj_pengeluaran = PermohonanDanaModel::GetFullRecord01($_GET["id"]);
 	//$obj_pengeluaran->Record($_GET["id"]);
 	
+	// List Rekanan
+	$db_rekanan = new DBConnection();
+	$db_rekanan->perintahSQL = "
+		SELECT
+			1 AS jenis, id_data_rekanan, 0 AS id_data_rekanan_pic,
+			CONCAT(id_data_rekanan,'-',0) AS id_assoc,
+			nama_perusahaan, '' AS nama_pic
+		FROM
+			itbl_apps_data_rekanan
+		UNION
+		SELECT
+			2 AS jenis, pic.id_data_rekanan, pic.id_data_rekanan_pic,
+			CONCAT(pic.id_data_rekanan,'-',pic.id_data_rekanan_pic) AS id_assoc,
+			rekanan.nama_perusahaan, pic.nama AS nama_pic
+		FROM
+			itbl_apps_data_rekanan_pic pic
+			LEFT JOIN itbl_apps_data_rekanan rekanan ON pic.id_data_rekanan = rekanan.id_data_rekanan
+		UNION
+		SELECT
+			3 AS jenis, id_data_rekanan, 0 AS id_data_rekanan_pic,
+			CONCAT(id_data_rekanan,'-',0) AS id_assoc,
+			nama_perusahaan, '' AS nama_pic
+		FROM
+			itbl_apps_data_rekanan
+		ORDER BY
+			nama_perusahaan ASC, id_data_rekanan ASC, jenis ASC
+	";
+	$rekanan = $db_rekanan->execute_reader();
+	
 	/********************************************* Twig engine *********************************************/
 	Twig_Autoloader::register();
 
@@ -192,12 +223,14 @@
 	
 	echo $twig->render('edit_permohonan_dana_proses.php', array(
 			'judul' => 'Assalamualaikum',
+			'user_id' => $_SESSION["APP_USER_ID"],
 			'pajak' => $pajak,
 			'combo_pegawai' => $combo_pegawai,
 			'data_detail' => $data_detail,
 			'list_normatif' => $list_normatif,
 			'obj_pengeluaran' => $obj_pengeluaran,
-			'pd' => $_GET["pd"]
+			'pd' => $_GET["pd"],
+			'rekanan' => $rekanan
 		)
 	);
 	/********************************************* End Of : Twig Engine *********************************************/

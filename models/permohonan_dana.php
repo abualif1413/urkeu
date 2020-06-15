@@ -590,6 +590,7 @@
 					a.na_tahun,
 					a.na_divisi,
 					a.keterangan,
+					a.id_data_rekanan_pic,
 					
 					a.id_pegawai_ybs,
 					a.diketahui_oleh,
