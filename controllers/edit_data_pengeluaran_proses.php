@@ -125,6 +125,10 @@
 	}
 	
 	if($_POST["save"] == "Save") {
+		$id_pegawai = explode("-", $_POST["id_pegawai"]);
+		$diketahui_oleh = explode("-", $_POST["diketahui_oleh"]);
+		$kuasa_pengguna_anggaran = explode("-", $_POST["kuasa_pengguna_anggaran"]);
+		
 		$obj = new PermohonanDanaModel();
 		$obj->tanggal = $_POST["tanggal"];
 		$obj->nomor = "";
@@ -133,9 +137,15 @@
 		$obj->na_tahun = $_POST["na_tahun"];
 		$obj->na_divisi = $_POST["na_divisi"];
 		$obj->keterangan = $_POST["keperluan"];
-		$obj->id_pegawai_ybs = $_POST["id_pegawai"];
-		$obj->diketahui_oleh = $_POST["diketahui_oleh"];
-		$obj->kuasa_pengguna_anggaran = $_POST["kuasa_pengguna_anggaran"];
+		
+		$obj->id_pegawai_ybs = $id_pegawai[0];
+		$obj->diketahui_oleh = $diketahui_oleh[0];
+		$obj->kuasa_pengguna_anggaran = $kuasa_pengguna_anggaran[0];
+		
+		$obj->id_pegawai_ybs_riwayat = $id_pegawai[1];
+		$obj->diketahui_oleh_riwayat = $diketahui_oleh[1];
+		$obj->kuasa_pengguna_anggaran_riwayat = $kuasa_pengguna_anggaran[1];
+		
 		$obj->no_sptjb = $_POST["no_sptjb"];
 		$obj->jenis_belanja = $_POST["jenis_belanja"];
 		$obj->menyatakan = $_POST["menyatakan"];
@@ -171,8 +181,8 @@
 		array_push($list_normatif, $ds_list_normatif);
 	}
 	
-	$obj_pengeluaran = new PermohonanDanaModel();
-	$obj_pengeluaran->Record($_GET["id"]);
+	$obj_pengeluaran = PermohonanDanaModel::GetFullRecord01($_GET["id"]);
+	//$obj_pengeluaran->Record($_GET["id"]);
 	
 	/********************************************* Twig engine *********************************************/
 	Twig_Autoloader::register();

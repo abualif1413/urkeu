@@ -92,11 +92,18 @@
 						b.nik, b.jabatan AS jabatan_struktural, a.jabatan_pengelola,
 						a.qty, a.sbu_honor,
 						@jumlah_bruto := (a.qty * a.sbu_honor) AS jumlah_bruto,
-						d.besar_pph,
+						CASE
+							WHEN a.ada_pph = 1 THEN d.besar_pph
+							ELSE 0
+						END AS besar_pph,
 						@pph := 
 							CASE
-								WHEN b.id_jenis_pegawai = '3' THEN CEIL(@jumlah_bruto / 2 * 5 / 100)
-								ELSE COALESCE(CEIL(@jumlah_bruto * d.besar_pph / 100), 0)
+								WHEN a.ada_pph = 0 THEN 0
+								ELSE
+									CASE
+										WHEN b.id_jenis_pegawai = '3' THEN CEIL(@jumlah_bruto / 2 * 5 / 100)
+										ELSE COALESCE(CEIL(@jumlah_bruto * d.besar_pph / 100), 0)
+									END
 							END AS pph,
 						(@jumlah_bruto - @pph) AS jumlah_dibayarkan
 				FROM

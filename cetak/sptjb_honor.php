@@ -26,7 +26,7 @@
 			$menyatakan .= "<li style='margin-bottom: 5px;'>" . $mytk . "</li>";
 	}
 	
-	$jumlah_total = $rincian["jumlah_dibayarkan"];
+	$jumlah_total = $rincian["jumlah_bruto"];
 		
 	
 	$tulisan_nrp = "NRP";

@@ -10,8 +10,18 @@
 			document.location.href = "data_pegawai.php?id=" + id;
 		}
 		
+		function go_riwayat(id) {
+			document.location.href = "../urlrvl/RiwayatPegawai?id_pegawai=" + id;
+		}
+		
 		function go_cetak(id) {
 			document.location.href = "cetak_berkas_belanja_honor_host.php?id=" + id;
+		}
+		
+		function go_hapus(id) {
+			if(confirm("Anda yakin akan menghapus data pegawai ini?")) {
+				document.location.href = "?hapus=1&id=" + id;
+			}
 		}
 	</script>
 	<div class="row">
@@ -51,6 +61,7 @@
 					<tr class="bg-success">
 						<th width="50px"></th>
 						<th width="50px"></th>
+						<th width="50px"></th>
 						<th width="30px">No.</th>
 						<th width="300px">Nama</th>
 						<th>Golongan</th>
@@ -63,8 +74,9 @@
 					{% for data in pegawai %}
 						{% set no = no + 1 %}
 						<tr>
-							<td align="center"><button type="button" class="btn btn-danger btn-xs btn-block" onclick="go_delete({{ data.id }});"><i class="fa fa-trash">&nbsp;</i> Hapus</button></td>
+							<td align="center"><button type="button" class="btn btn-danger btn-xs btn-block" onclick="go_hapus({{ data.id }});"><i class="fa fa-trash">&nbsp;</i> Hapus</button></td>
 							<td align="center"><button type="button" class="btn btn-success btn-xs btn-block" onclick="go_edit({{ data.id }});"><i class="fa fa-pencil">&nbsp;</i> Ubah</button></td>
+							<td align="center"><button type="button" class="btn btn-primary btn-xs btn-block" onclick="go_riwayat({{ data.id }});"><i class="fa fa-pencil">&nbsp;</i> Riwayat</button></td>
 							<td align="right">{{ no }}</td>
 							<td>{{ data.nama_pegawai }}</td>
 							<td>{{ data.golongan }}</td>

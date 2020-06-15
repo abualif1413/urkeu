@@ -1,0 +1,6 @@
+#DATABASE
+; alter table itbl_apps_data_rekanan_pic_file_berkas add field nama_file_asli
+; ALTER TABLE `t_pegawai` ADD COLUMN `hapus`  enum('N','Y') NULL DEFAULT 'N' AFTER `gapok`
+; ALTER TABLE t_permohonan_dana ADD COLUMN id_pegawai_ybs_riwayat, diketahui_oleh_riwayat, kuasa_pengguna_anggaran_riwayat
+; ALTER TABLE t_permohonan_dana ADD COLUMN id_data_rekanan_pic
+

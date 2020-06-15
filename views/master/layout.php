@@ -164,6 +164,7 @@
 					<li><a class="" href="lap_pu_dan_transaksi.php"><span class="fa fa-book">&nbsp;</span> Lap. Transaksi</a></li>
 					<li><a class="" href="buku_kas_bank.php"><span class="fa fa-book">&nbsp;</span> Buku Kas Bank</a></li>
 					<li><a class="" href="laporan_rekening.php"><span class="fa fa-book">&nbsp;</span> Laporan Rek. Bank</a></li>
+					<li><a class="" href="../urlrvl/DataRekanan"><span class="fa fa-cc">&nbsp;</span> Data Rekanan</a></li>
 				</ul>
 			</li>
 			<li class="parent ">

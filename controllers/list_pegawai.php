@@ -6,6 +6,13 @@
 	
 	TUser::BelumLogin();
 	
+	if($_GET["hapus"] == 1) {
+		$sql = "UPDATE t_pegawai SET hapus='Y' WHERE id='" . $_GET["id"] . "'";
+		mysqli_query($app_conn, $sql);
+		
+		header("location:" . $_SERVER["PHP_SELF"]);
+	}
+	
 	// Load data pegawai
 	$sql_pegawai = "
 		SELECT
@@ -19,6 +26,7 @@
 			OR b.golongan LIKE '%" . $_GET["src"] . "%'
 			OR c.pangkat LIKE '%" . $_GET["src"] . "%'
 			OR a.jabatan LIKE '%" . $_GET["src"] . "%')
+			AND hapus = 'N'
 		ORDER BY
 			a.nama_pegawai ASC
 	";

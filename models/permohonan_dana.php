@@ -280,9 +280,13 @@
 		var $id_pegawai_ybs;
 		var $diketahui_oleh;
 		var $kuasa_pengguna_anggaran;
+		var $id_pegawai_ybs_riwayat;
+		var $diketahui_oleh_riwayat;
+		var $kuasa_pengguna_anggaran_riwayat;
 		var $no_sptjb;
 		var $jenis_belanja;
 		var $menyatakan;
+		var $id_data_rekanan_pic;
 		var $user_insert;
 		
 		var $id_yg_diinsert;
@@ -299,9 +303,13 @@
 			$this->id_pegawai_ybs = 0;
 			$this->diketahui_oleh = 0;
 			$this->kuasa_pengguna_anggaran = 0;
+			$this->id_pegawai_ybs_riwayat = 0;
+			$this->diketahui_oleh_riwayat = 0;
+			$this->kuasa_pengguna_anggaran_riwayat = 0;
 			$this->no_sptjb = "";
 			$this->jenis_belanja = "";
 			$this->menyatakan = "";
+			$this->id_data_rekanan_pic = 0;
 			$this->user_insert = "";
 		}
 		
@@ -321,9 +329,13 @@
 				$this->id_pegawai_ybs = $ds["id_pegawai_ybs"];
 				$this->diketahui_oleh = $ds["diketahui_oleh"];
 				$this->kuasa_pengguna_anggaran = $ds["kuasa_pengguna_anggaran"];
+				$this->id_pegawai_ybs_riwayat = $ds["id_pegawai_ybs_riwayat"];
+				$this->diketahui_oleh_riwayat = $ds["diketahui_oleh_riwayat"];
+				$this->kuasa_pengguna_anggaran_riwayat = $ds["kuasa_pengguna_anggaran_riwayat"];
 				$this->no_sptjb = $ds["no_sptjb"];
 				$this->jenis_belanja = $ds["jenis_belanja"];
 				$this->menyatakan = $ds["menyatakan"];
+				$this->id_data_rekanan_pic = $ds["id_data_rekanan_pic"];
 				$this->user_insert = $ds["user_insert"];
 			}
 		}
@@ -335,15 +347,19 @@
 				INSERT INTO t_permohonan_dana(
 					tanggal, nomor,
 					na_nomor, na_bulan, na_tahun, na_divisi,
-					keterangan, id_pegawai_ybs,
-					diketahui_oleh, kuasa_pengguna_anggaran,
-					no_sptjb, jenis_belanja, menyatakan, user_insert
+					keterangan,
+					id_pegawai_ybs, diketahui_oleh, kuasa_pengguna_anggaran,
+					id_pegawai_ybs_riwayat, diketahui_oleh_riwayat, kuasa_pengguna_anggaran_riwayat,
+					no_sptjb, jenis_belanja, menyatakan, user_insert,
+					id_data_rekanan_pic
 				) VALUES(
 					?, ?,
 					?, ?, ?, ?,
-					?, ?,
-					?, ?,
-					?, ?, ?, ?
+					?,
+					?, ?, ?,
+					?, ?, ?,
+					?, ?, ?, ?,
+					?
 				)
 			";
 			$db->add_parameter("s", $this->tanggal);
@@ -355,15 +371,21 @@
 			$db->add_parameter("s", $this->na_divisi);
 			
 			$db->add_parameter("s", $this->keterangan);
-			$db->add_parameter("i", $this->id_pegawai_ybs);
 			
+			$db->add_parameter("i", $this->id_pegawai_ybs);
 			$db->add_parameter("i", $this->diketahui_oleh);
 			$db->add_parameter("i", $this->kuasa_pengguna_anggaran);
+			
+			$db->add_parameter("i", $this->id_pegawai_ybs_riwayat);
+			$db->add_parameter("i", $this->diketahui_oleh_riwayat);
+			$db->add_parameter("i", $this->kuasa_pengguna_anggaran_riwayat);
 			
 			$db->add_parameter("s", $this->no_sptjb);
 			$db->add_parameter("s", $this->jenis_belanja);
 			$db->add_parameter("s", $this->menyatakan);
 			$db->add_parameter("s", $_SESSION["APP_USER_ID"]);
+			
+			$db->add_parameter("i", $this->id_data_rekanan_pic);
 			$db->execute_non_query();
 			
 			$id_permohonan_dana = 0;
@@ -381,9 +403,11 @@
 				UPDATE t_permohonan_dana SET
 					tanggal=?, nomor=?,
 					na_nomor=?, na_bulan=?, na_tahun=?, na_divisi=?,
-					keterangan=?, id_pegawai_ybs=?,
-					diketahui_oleh=?, kuasa_pengguna_anggaran=?,
-					no_sptjb=?, jenis_belanja=?, menyatakan=?, user_insert=?
+					keterangan=?,
+					id_pegawai_ybs=?, diketahui_oleh=?, kuasa_pengguna_anggaran=?,
+					id_pegawai_ybs_riwayat=?, diketahui_oleh_riwayat=?, kuasa_pengguna_anggaran_riwayat=?,
+					no_sptjb=?, jenis_belanja=?, menyatakan=?, user_insert=?,
+					id_data_rekanan_pic=?
 				WHERE
 					id=?
 			";
@@ -396,15 +420,21 @@
 			$db->add_parameter("s", $this->na_divisi);
 			
 			$db->add_parameter("s", $this->keterangan);
-			$db->add_parameter("i", $this->id_pegawai_ybs);
 			
+			$db->add_parameter("i", $this->id_pegawai_ybs);
 			$db->add_parameter("i", $this->diketahui_oleh);
 			$db->add_parameter("i", $this->kuasa_pengguna_anggaran);
+			
+			$db->add_parameter("i", $this->id_pegawai_ybs_riwayat);
+			$db->add_parameter("i", $this->diketahui_oleh_riwayat);
+			$db->add_parameter("i", $this->kuasa_pengguna_anggaran_riwayat);
 			
 			$db->add_parameter("s", $this->no_sptjb);
 			$db->add_parameter("s", $this->jenis_belanja);
 			$db->add_parameter("s", $this->menyatakan);
 			$db->add_parameter("s", $_SESSION["APP_USER_ID"]);
+			
+			$db->add_parameter("i", $this->id_data_rekanan_pic);
 			
 			$db->add_parameter("i", $id);
 			$db->execute_non_query();
@@ -560,42 +590,53 @@
 					a.na_tahun,
 					a.na_divisi,
 					a.keterangan,
+					
 					a.id_pegawai_ybs,
 					a.diketahui_oleh,
 					a.kuasa_pengguna_anggaran,
+					
+					a.id_pegawai_ybs_riwayat,
+					a.diketahui_oleh_riwayat,
+					a.kuasa_pengguna_anggaran_riwayat,
+					
 					a.no_sptjb,
 					a.jenis_belanja,
 					a.menyatakan,
 					a.user_insert,
-					b.nama_pegawai, c.golongan, d.pangkat, b.jabatan, b.nik,
-					b.id_jenis_pegawai, b1.id_jenis_pegawai AS id_jenis_pegawai_diketahui, b2.id_jenis_pegawai AS id_jenis_pegawai_kuitansi,
+					b.nama_pegawai, c.golongan, d.pangkat, b_his.jabatan, b_his.nik,
+					b_his.id_jenis_pegawai, b1_his.id_jenis_pegawai AS id_jenis_pegawai_diketahui, b2_his.id_jenis_pegawai AS id_jenis_pegawai_kuitansi,
 					
-					b1.nik AS nik_diketahui,
+					b1_his.nik AS nik_diketahui,
 					b1.nama_pegawai AS nama_pegawai_diketahui,
 					c1.golongan AS golongan_diketahui,
 					d1.pangkat AS pangkat_diketahui,
-					b1.jabatan AS jabatan_diketahui,
+					b1_his.jabatan AS jabatan_diketahui,
 					
-					b2.nik AS nik_kuitansi,
+					b2_his.nik AS nik_kuitansi,
 					b2.nama_pegawai AS nama_pegawai_kuitansi,
 					c2.golongan AS golongan_kuitansi,
 					d2.pangkat AS pangkat_kuitansi,
-					b2.jabatan AS jabatan_kuitansi,
+					b2_his.jabatan AS jabatan_kuitansi,
 					func_total_belanja_barang(a.id) AS total_netto,
 					func_total_ppn_belanja_barang(a.id) AS total_ppn,
 					func_total_pph_belanja_barang(a.id) AS total_pph
 				FROM
 					t_permohonan_dana a
+				
 					LEFT JOIN t_pegawai b ON a.id_pegawai_ybs = b.id
-					LEFT JOIN m_golongan c ON b.id_golongan = c.id
-					LEFT JOIN m_pangkat_pegawai d ON b.id_pangkat = d.id
+					LEFT JOIN itbl_apps_riwayat_pegawai b_his ON a.id_pegawai_ybs_riwayat = b_his.id_riwayat_pegawai
+					LEFT JOIN m_golongan c ON b_his.id_golongan = c.id
+					LEFT JOIN m_pangkat_pegawai d ON b_his.id_pangkat = d.id
+				
 					LEFT JOIN t_pegawai b1 ON a.diketahui_oleh = b1.id
-					LEFT JOIN m_golongan c1 ON b1.id_golongan = c1.id
-					LEFT JOIN m_pangkat_pegawai d1 ON b1.id_pangkat = d1.id
+					LEFT JOIN itbl_apps_riwayat_pegawai b1_his ON a.diketahui_oleh_riwayat = b1_his.id_riwayat_pegawai
+					LEFT JOIN m_golongan c1 ON b1_his.id_golongan = c1.id
+					LEFT JOIN m_pangkat_pegawai d1 ON b1_his.id_pangkat = d1.id
 					
 					LEFT JOIN t_pegawai b2 ON a.kuasa_pengguna_anggaran = b2.id
-					LEFT JOIN m_golongan c2 ON b2.id_golongan = c2.id
-					LEFT JOIN m_pangkat_pegawai d2 ON b2.id_pangkat = d2.id
+					LEFT JOIN itbl_apps_riwayat_pegawai b2_his ON a.kuasa_pengguna_anggaran_riwayat = b2_his.id_riwayat_pegawai
+					LEFT JOIN m_golongan c2 ON b2_his.id_golongan = c2.id
+					LEFT JOIN m_pangkat_pegawai d2 ON b2_his.id_pangkat = d2.id
 				WHERE
 					a.id='" . $id . "'
 				ORDER BY

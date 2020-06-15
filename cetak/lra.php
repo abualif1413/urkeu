@@ -154,7 +154,10 @@
 	
 	$cetak = "
 		<style>
-			@page { margin: 0.5cm 0.5cm; }
+			@page {
+				margin: 0.5cm 0.5cm;
+				size: 21cm 29.5cm landscape;
+			}
 		</style>
 		<div style='margin-bottom: 20px; font-size: 10pt;'>
 			<table width='500px' style='font-weight: bold;'>
@@ -197,13 +200,13 @@
 		
 		<br />
 		
-		<table width='85%' cellspacing='0' cellpadding='1' border='1' style='font-size: 9pt; page-break-inside: auto;'>
+		<table width='98%' cellspacing='0' cellpadding='1' border='1' style='font-size: 9pt; page-break-inside: auto;'>
 			<thead>
 				<tr>
-					<th rowspan='2' align='center' width='70px'>KODE</th>
+					<th rowspan='2' align='center'>KODE</th>
 					<th rowspan='2' align='center'>URAIAN</th>
-					<th rowspan='2' align='center' width='100px'>PAGU REVISI</th>
-					<th rowspan='2' align='center' width='100px'>PAGU</th>
+					<th rowspan='2' align='center'>PAGU REVISI</th>
+					<th rowspan='2' align='center'>PAGU</th>
 					
 					<th colspan='2' align='center'>REALISASI S/D BULAN LALU</th>
 					
@@ -215,17 +218,17 @@
 					
 				</tr>
 				<tr>
-					<th align='center' width='100px'>TOTAL</th>
-					<th align='center' width='50px'>%</th>
+					<th align='center'>TOTAL</th>
+					<th align='center'>%</th>
 					
-					<th align='center' width='100px'>TOTAL</th>
-					<th align='center' width='50px'>%</th>
+					<th align='center'>TOTAL</th>
+					<th align='center'>%</th>
 					
-					<th align='center' width='100px'>TOTAL</th>
-					<th align='center' width='50px'>%</th>
+					<th align='center'>TOTAL</th>
+					<th align='center'>%</th>
 					
-					<th align='center' width='100px'>TOTAL</th>
-					<th align='center' width='50px'>%</th>
+					<th align='center'>TOTAL</th>
+					<th align='center'>%</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -264,7 +267,7 @@
 	$dompdf->loadHtml($cetak);
 	
 	// (Optional) Setup the paper size and orientation
-	$dompdf->setPaper('legal', 'landscape');
+	//$dompdf->setPaper('legal', 'landscape');
 	
 	// Render the HTML as PDF
 	$dompdf->render();

@@ -669,10 +669,13 @@
 	$db_tanggal = null;
 	$css = "
 		<style>
-			@page { margin: 0.5cm 0.5cm; }
+			@page {
+				margin: 0.5cm 0.5cm;
+				size: 21cm 29.5cm landscape;
+			}
 		</style>
 	";
-	$cetak = "
+	$cetak = $css . "
 		
 		
 		<div id='isi_buku_kas'>
@@ -698,10 +701,10 @@
 			
 			<br />
 			
-			<table width='70%' cellspacing='0' cellpadding='0' border='1' style='font-size: 8pt;'>
+			<table width='100%' cellspacing='0' cellpadding='0' border='1' style='font-size: 8pt;'>
 				<thead>
 					<tr>
-						<th rowspan='2' width='30px' align='center'>NO.</th>
+						<th rowspan='2' align='center'>NO.</th>
 						<th rowspan='2'>URAIAN</th>
 						
 						<th colspan='3' align='center'>DEBET</th>

@@ -24,6 +24,10 @@
 		</div>
 	</div><!--/.row-->
 	<script type="text/javascript" charset="utf-8">
+		$(function() {
+			go_load_rincian_barang();
+			go_load_rincian_normatif();
+		});
 		// Cek nomor berkas
 		function cek_nomor_berkas() {
 			var tanggal = $("#tgl_uraian").val();
@@ -47,23 +51,75 @@
 			}
 		}
 		setInterval(cek_nomor_berkas, 1000);
-		// End Of : Cek Nomor Berkas
+		// End Of : Cek Nomor Berka
 		
-		function go_submit() {
-			var penerima = $("#penerima").val();
-			var jumlah = $("#jumlah").val();
-			var uraian = $("#uraian").val();
-			if(penerima == "" || jumlah == "" || uraian == "") {
-				alert("Input belum lengkap");
+		/*
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 | Bagian penambahan rincian barang
+		 | Saat ini dipisah karena penambahan fitur pengecekan pajak dari data rekanan
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 */
+		
+		function go_add_rincian_barang() {
+			var formData = new FormData(document.querySelector("#frm_rincian_barang"));
+			formData.append("user_id", "{{ user_id }}");
+
+			if(formData.get("penerima") == "" || formData.get("qty") == "" || formData.get("satuan") == "") {
+				alert("Peneriman, qty, dan satuan harus diisi");
 				return false;
 			} else {
-				return true
+				$.ajax({
+		            url         : "../urlrvl/api/PengeluaranDana/TambahDetail",
+		            type        : "post",
+		            dataType    : "json",
+		            data        : formData,
+		            processData : false,
+		            contentType : false,
+		            success:function(r, textStatus, jqXHR){
+		                go_load_rincian_barang();
+		                go_reset();
+		            },
+		            error: function(jqXHR, textStatus, errorThrown){
+		                alert("Error : " + textStatus);
+		            }
+		        });
+		        return false;
 			}
+		}
+		
+		function go_load_rincian_barang() {
+			$.get("../urlrvl/api/PengeluaranDana/GetDetailTemp/{{ user_id }}", function() {})
+				.done(function(r) {
+					var isi = "";
+					$.each(r.data, function(i, v) {
+						isi += "<tr>";
+							isi += "<td><button class='btn btn-xs btn-warning btn-block' onclick='go_delete(" + v.id + ");'><i class='fa fa-trash'></i></button></td>";
+							isi += "<td><button class='btn btn-xs btn-success btn-block' onclick='go_edit(" + v.id + ")'><i class='fa fa-edit'></i></button></td>";
+							isi += "<td>" + (i + 1) + "</td>";
+							isi += "<td>" + v.penerima + "</td>";
+							isi += "<td>" + v.qty + "</td>";
+							isi += "<td>" + v.satuan + "</td>";
+							isi += "<td>" + accounting.format(v.harga_satuan) + "</td>";
+							isi += "<td>" + v.uraian + "</td>";
+						isi += "</tr>";
+					});
+					$("#tbody_rincian").html(isi);
+				})
+				.fail(function() {
+					alert("Error saat load rincian barang");
+				});
 		}
 		
 		function go_delete(id) {
 			if(confirm("Yakin akan menghapus data?")) {
-				document.location.href = "?delete=1&id=" + id + "&pd={{ pd }}";
+				$.get("../urlrvl/api/PengeluaranDana/hapusDetail/" + id, function() {})
+					.done(function(r) {
+						go_load_rincian_barang();
+						go_reset();
+					})
+					.fail(function() {
+						alert("Error saat hapus rincian barang");
+					});
 			}
 		}
 		
@@ -100,24 +156,80 @@
     		});
 		}
 		
-		function go_reset() {
-			$("#id_detail").val("");
-			$("#penerima").val("");
-			$("#qty").val("");
-			$("#satuan").val("");
-			$("#harga_satuan").val("");
-			$("#uraian").val("");
-			$("#no_faktur").val("");
-			$("#tgl_faktur").val("");
-			$("#ppn").prop("checked", 0);
-			$("#pph").prop("checked", 0);
-			$("#add").show();
-    		$("#edit").hide();
+		/*
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 */
+		
+		
+		
+		
+		/*
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 | Bagian penambahan rincian barang
+		 | Saat ini dipisah karena penambahan fitur pengecekan pajak dari data rekanan
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 */
+		
+		function go_add_normatif() {
+			var formData = new FormData(document.querySelector("#frm_normatif_barang"));
+			formData.append("user_id", "{{ user_id }}");
+			
+			if(formData.get("normatif_id_pegawai") == "" || formData.get("normatif_qty") == "" || formData.get("normatif_sbu_honor") == "" || formData.get("normatif_jabatan_pengelola") == "") {
+				alert("Data normatif belum lengkap");
+				
+				return false;
+			} else {
+				$.ajax({
+		            url         : "../urlrvl/api/PengeluaranDana/TambahDetailNormatif",
+		            type        : "post",
+		            dataType    : "json",
+		            data        : formData,
+		            processData : false,
+		            contentType : false,
+		            success:function(r, textStatus, jqXHR){
+		                go_load_rincian_normatif();
+		                go_reset_normatif();
+		            },
+		            error: function(jqXHR, textStatus, errorThrown){
+		                alert("Error : " + textStatus);
+		            }
+		        });
+		        
+		        return false;
+			}
+		}
+		
+		function go_load_rincian_normatif() {
+			$.get("../urlrvl/api/PengeluaranDana/GetDetailNormatifTemp/{{ user_id }}", function() {})
+				.done(function(r) {
+					var isi = "";
+					$.each(r.data, function(i, v) {
+						isi += "<tr>";
+							isi += "<td><button class='btn btn-xs btn-warning btn-block' onclick='go_delete_normatif(" + v.id + ");'><i class='fa fa-trash'></i></button></td>";
+							isi += "<td><button class='btn btn-xs btn-success btn-block' onclick='go_edit_normatif(" + v.id + ")'><i class='fa fa-edit'></i></button></td>";
+							isi += "<td>" + (i + 1) + "</td>";
+							isi += "<td>" + v.nama_pegawai + "</td>";
+							isi += "<td>" + v.qty + "</td>";
+							isi += "<td>" + accounting.format(v.sbu_honor) + "</td>";
+						isi += "</tr>";
+					});
+					$("#tbody_normatif").html(isi);
+				})
+				.fail(function() {
+					alert("Error saat load rincian barang");
+				});
 		}
 		
 		function go_delete_normatif(id) {
 			if(confirm("Yakin akan menghapus data?")) {
-				document.location.href = "?delete_normatif=1&id=" + id + "&pd={{ pd }}";
+				$.get("../urlrvl/api/PengeluaranDana/hapusDetailNormatif/" + id, function() {})
+					.done(function(r) {
+						go_load_rincian_normatif();
+						go_reset_normatif();
+					})
+					.fail(function() {
+						alert("Error saat hapus rincian barang");
+					});
 			}
 		}
 		
@@ -143,6 +255,120 @@
     		});
 		}
 		
+		/*
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 */
+		
+		
+		
+		
+		/*
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 | Bagian pemilihan rekanan
+		 | Ketika rekanan -> PIC nya dipilih, maka akan menentukan bentuk penginputan PPN dan PPh nya
+		 | Kemudian juga menset di bagian utama nya agar bisa disimpan ke database data pic rekanannya
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 */
+		
+		function pilih_pic_rekanan() {
+			var id_assoc_pic_rekanan = $("#rekanan").val();
+			
+			if(id_assoc_pic_rekanan != "") {
+				var pic_rekanan = id_assoc_pic_rekanan.split("-");
+				var id_data_rekanan = pic_rekanan[0];
+				var id_data_rekanan_pic = pic_rekanan[1];
+				
+				$("#id_data_rekanan_pic").val(id_data_rekanan_pic);
+				
+				$.get("../urlrvl/api/PengeluaranDana/GetRekananPIC/" + id_data_rekanan_pic, function() {})
+					.done(function(r) {
+						var resp = r.data;
+						$("#nama_rekanan").val(resp.nama_rekanan);
+						$("#nama_rekanan_pic").val(resp.nama_pic);
+						
+						switch(resp.kena_ppn.toUpperCase()) {
+							case "YES" :
+								$("#ppn").prop("checked", true);
+								$("#ppn").hide();
+								$("#tanda_kena_ppn").removeClass("fa-remove");
+								$("#tanda_kena_ppn").addClass("fa-check");
+								break;
+							case "NO" :
+								$("#ppn").prop("checked", false);
+								$("#ppn").hide();
+								$("#tanda_kena_ppn").removeClass("fa-check");
+								$("#tanda_kena_ppn").addClass("fa-remove");
+								break;
+							case "YES_NO" :
+								$("#ppn").prop("checked", false);
+								$("#ppn").show();
+								$("#tanda_kena_ppn").removeClass("fa-check");
+								$("#tanda_kena_ppn").removeClass("fa-remove");
+								break;
+						}
+						switch(resp.kena_pph.toUpperCase()) {
+							case "YES" :
+								$("#pph").prop("checked", true);
+								$("#pph").hide();
+								$("#tanda_kena_pph").removeClass("fa-remove");
+								$("#tanda_kena_pph").addClass("fa-check");
+								break;
+							case "NO" :
+								$("#pph").prop("checked", false);
+								$("#pph").hide();
+								$("#tanda_kena_pph").removeClass("fa-check");
+								$("#tanda_kena_pph").addClass("fa-remove");
+								break;
+							case "YES_NO" :
+								$("#pph").prop("checked", false);
+								$("#pph").show();
+								$("#tanda_kena_pph").removeClass("fa-check");
+								$("#tanda_kena_pph").removeClass("fa-remove");
+								break;
+						}
+					})
+					.fail(function() {
+						alert("Error saat ambil data PIC rekanan");
+					});
+			} else {
+				$("#id_data_rekanan_pic").val("");
+				$("#nama_rekanan").val("");
+				$("#nama_rekanan_pic").val("");
+			}
+		}
+		
+		/*
+		 | ----------------------------------------------------------------------------------------------------------------------------------------
+		 */
+		
+		
+		function go_submit() {
+			var penerima = $("#penerima").val();
+			var jumlah = $("#jumlah").val();
+			var uraian = $("#uraian").val();
+			if(penerima == "" || jumlah == "" || uraian == "") {
+				alert("Input belum lengkap");
+				return false;
+			} else {
+				return true
+			}
+		}
+		
+		function go_reset() {
+			$("#id_detail").val("");
+			$("#penerima").val("");
+			$("#qty").val("");
+			$("#satuan").val("");
+			$("#harga_satuan").val("");
+			$("#uraian").val("");
+			$("#no_faktur").val("");
+			$("#tgl_faktur").val("");
+			$("#ppn").prop("checked", 0);
+			$("#pph").prop("checked", 0);
+			$("#add").show();
+    		$("#edit").hide();
+		}
+		
 		function go_reset_normatif() {
 			$("#normatif_id_detail").val("");
 			$("#normatif_id_pegawai").val("").trigger('change');
@@ -152,6 +378,15 @@
 			$("#add_normatif").show();
     		$("#edit_normatif").hide();
 		}
+		
+		function pilih_pegawai(id_value, id_show){
+			var width = 1200;
+	        var height = 500;
+	        var top = (window.screen.height / 2) - ((height / 2) + 50);
+	        var left = (window.screen.width / 2) - ((width / 2) + 10);
+	        
+	        window.open("../urlrvl/AmbilDataPegawai?id_value=" + id_value + "&id_show=" + id_show, "", "top=" + top + ",left=" + left + ",width=" + width + ",height=" + height + ",toolbar=no,menubar=no,scrollbars=yes,location=no,directories=no");
+	    }
 	</script>
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#rincian_barang">Rincian Barang</a></li>
@@ -164,9 +399,26 @@
 		<div id="rincian_barang" class="tab-pane fade in active">
 			<!-- Rincian Barang -->
 			<div class="panel panel-primary">
+				<div class="panel-heading">Pilih Rekanan</div>
+				<div class="panel-body">
+					<select name="rekanan" id="rekanan" class="form-control" onchange="pilih_pic_rekanan();">
+						<option value="">- Pilih Rekanan -</option>
+						{% for rek in rekanan %}
+							{% if rek.jenis == 1 %}
+								<optgroup label="{{ rek.nama_perusahaan }}">
+							{% elseif rek.jenis == 2 %}
+									<option value="{{ rek.id_assoc }}">{{ rek.nama_pic }}</option>
+							{% elseif rek.jenis == 3 %}
+								</optgroup>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="panel panel-primary">
 				<div class="panel-heading">Rincian Barang</div>
 				<div class="panel-body">
-					<form class="form-horizontal" action="" method="post">
+					<form class="form-horizontal" action="" method="post" id="frm_rincian_barang" onsubmit="return go_add_rincian_barang();">
 						<input type="hidden" name="pd" value="{{ pd }}" />
 						<input type="hidden" name="id_detail" id="id_detail" />
 						<div class="form-group">
@@ -200,8 +452,8 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Pengenaan Pajak</label>
 							<div class="col-sm-5">
-								<label class="checkbox-inline control-label"><input type="checkbox" name="ppn" id="ppn" value="1">PPN</label>
-								<label class="checkbox-inline control-label"><input type="checkbox" name="pph" id="pph" value="1">PPh</label>
+								<label class="checkbox-inline control-label"><input type="checkbox" name="ppn" id="ppn" value="1"><i id="tanda_kena_ppn" class="fa"></i> PPN</label>
+								<label class="checkbox-inline control-label"><input type="checkbox" name="pph" id="pph" value="1"><i id="tanda_kena_pph" class="fa"></i> PPh</label>
 							</div>
 						</div>
 						<div class="form-group">
@@ -230,21 +482,8 @@
 									<th>Uraian / Material</th>
 								</tr>
 							</thead>
-							<tbody>
-								{% set no = 0 %}
-								{% for data_detail in data_detail %}
-									{% set no = no + 1 %}
-									<tr>
-										<td><button class="btn btn-xs btn-warning" onclick="go_delete({{ data_detail.id }});"><i class="fa fa-trash"></i> Delete</button></td>
-										<td><button class="btn btn-xs btn-success" onclick="go_edit({{ data_detail.id }});"><i class="fa fa-edit"></i> Edit</button></td>
-										<td align="right">{{ no }}</td>
-										<td>{{ data_detail.penerima }}</td>
-										<td>{{ data_detail.qty }}</td>
-										<td>{{ data_detail.satuan }}</td>
-										<td align="right">{{ data_detail.harga_satuan|number_format(2, ".", ",") }}</td>
-										<td>{{ data_detail.uraian }}</td>
-									</tr>
-								{% endfor %}
+							<tbody id="tbody_rincian">
+								
 							</tbody>
 						</table>
 					</div>
@@ -257,7 +496,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">Daftar Normatif</div>
 				<div class="panel-body">
-					<form class="form-horizontal" action="" method="post">
+					<form class="form-horizontal" action="" method="post" id="frm_normatif_barang" onsubmit="return go_add_normatif();">
 						<input type="hidden" name="pd" value="{{ pd }}" />
 						<input type="hidden" name="normatif_id_detail" id="normatif_id_detail" />
 						<div class="form-group">
@@ -309,19 +548,8 @@
 									<th width="150px">Honor</th>
 								</tr>
 							</thead>
-							<tbody>
-								{% set no = 0 %}
-								{% for list in list_normatif %}
-									{% set no = no + 1 %}
-									<tr>
-										<td><button class="btn btn-xs btn-warning btn-block" onclick="go_delete_normatif({{ list.id }});"><i class="fa fa-trash"></i> Delete</button></td>
-										<td><button class="btn btn-xs btn-success btn-block" onclick="go_edit_normatif({{ list.id }});"><i class="fa fa-edit"></i> Edit</button></td>
-										<td align="right">{{ no }}</td>
-										<td>{{ list.nama_pegawai }}</td>
-										<td>{{ list.qty }}</td>
-										<td align="right">{{ list.sbu_honor|number_format(2, ".", ",") }}</td>
-									</tr>
-								{% endfor %}
+							<tbody id="tbody_normatif">
+								
 							</tbody>
 						</table>
 					</div>
@@ -336,6 +564,19 @@
 		<div class="panel-body">
 			<form class="form-horizontal" action="" method="post">
 				<input type="hidden" name="pd" value="{{ pd }}" />
+				<input type="hidden" name="id_data_rekanan_pic" id="id_data_rekanan_pic" value="" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="penerima">Rekanan</label>
+					<div class="col-sm-10">
+						<input type="text" name="nama_rekanan" id="nama_rekanan" class="form-control" readonly="readonly" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="penerima">P.I.C</label>
+					<div class="col-sm-10">
+						<input type="text" name="nama_rekanan_pic" id="nama_rekanan_pic" class="form-control" readonly="readonly" />
+					</div>
+				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Tanggal</label>
 					<div class="col-sm-3">
@@ -364,46 +605,43 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Pegawai YBS</label>
 					<div class="col-sm-10">
-						<select name="id_pegawai" id="id_pegawai" class="form-control">
-							<option value=""></option>
-							{% for combo in combo_pegawai %}
-								<optgroup label="{{ combo.jenis_pegawai }}">
-								{% for rincian in combo.rincian %}
-									<option value="{{ rincian.id }}">{{ rincian.nama_pegawai }}</option>
-								{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
+						<div class="input-group">
+							<input type="hidden" class="form-control" placeholder="Search" name="id_pegawai" id="id_pegawai">
+							<input type="text" class="form-control" placeholder="Search" name="pegawai_ybs" id="pegawai_ybs" readonly="readonly">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" type="button" onclick="pilih_pegawai('id_pegawai', 'pegawai_ybs');">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Diketahui Oleh</label>
 					<div class="col-sm-10">
-						<select name="diketahui_oleh" id="diketahui_oleh" class="form-control">
-							<option value=""></option>
-							{% for combo in combo_pegawai %}
-								<optgroup label="{{ combo.jenis_pegawai }}">
-								{% for rincian in combo.rincian %}
-									<option value="{{ rincian.id }}">{{ rincian.nama_pegawai }}</option>
-								{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
+						<div class="input-group">
+							<input type="hidden" class="form-control" placeholder="Search" name="diketahui_oleh" id="diketahui_oleh">
+							<input type="text" class="form-control" placeholder="Search" name="pegawai_do" id="pegawai_do" readonly="readonly">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" type="button" onclick="pilih_pegawai('diketahui_oleh', 'pegawai_do');">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Pejabat Kwitansi</label>
 					<div class="col-sm-10">
-						<select name="kuasa_pengguna_anggaran" id="kuasa_pengguna_anggaran" class="form-control">
-							<option value=""></option>
-							{% for combo in combo_pegawai %}
-								<optgroup label="{{ combo.jenis_pegawai }}">
-								{% for rincian in combo.rincian %}
-									<option value="{{ rincian.id }}">{{ rincian.nama_pegawai }}</option>
-								{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
+						<div class="input-group">
+							<input type="hidden" class="form-control" placeholder="Search" name="kuasa_pengguna_anggaran" id="kuasa_pengguna_anggaran">
+							<input type="text" class="form-control" placeholder="Search" name="pegawai_kpa" id="pegawai_kpa" readonly="readonly">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" type="button" onclick="pilih_pegawai('kuasa_pengguna_anggaran', 'pegawai_kpa');">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">

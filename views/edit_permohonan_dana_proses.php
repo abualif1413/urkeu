@@ -130,6 +130,16 @@
 			$("#add_normatif").show();
     		$("#edit_normatif").hide();
 		}
+		
+		
+		function pilih_pegawai(id_value, id_show){
+			var width = 1200;
+	        var height = 500;
+	        var top = (window.screen.height / 2) - ((height / 2) + 50);
+	        var left = (window.screen.width / 2) - ((width / 2) + 10);
+	        
+	        window.open("../urlrvl/AmbilDataPegawai?id_value=" + id_value + "&id_show=" + id_show, "", "top=" + top + ",left=" + left + ",width=" + width + ",height=" + height + ",toolbar=no,menubar=no,scrollbars=yes,location=no,directories=no");
+	    }
 	</script>
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#rincian_barang">Rincian Barang</a></li>
@@ -344,58 +354,43 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Pegawai YBS</label>
 					<div class="col-sm-10">
-						<select name="id_pegawai" id="id_pegawai" class="form-control">
-							<option value=""></option>
-							{% for combo in combo_pegawai %}
-								<optgroup label="{{ combo.jenis_pegawai }}">
-								{% for rincian in combo.rincian %}
-									{% set selected = "" %}
-									{% if rincian.id == obj_pengeluaran.id_pegawai_ybs %}
-										{% set selected = "selected='selected'" %}
-									{% endif %}
-									<option value="{{ rincian.id }}" {{ selected }}>{{ rincian.nama_pegawai }}</option>
-								{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
+						<div class="input-group">
+							<input type="hidden" class="form-control" placeholder="Search" name="id_pegawai" id="id_pegawai" value="{{ obj_pengeluaran.id_pegawai_ybs }}-{{ obj_pengeluaran.id_pegawai_ybs_riwayat }}">
+							<input type="text" class="form-control" placeholder="Search" name="pegawai_ybs" id="pegawai_ybs" readonly="readonly" value="{{ obj_pengeluaran.nama_pegawai }} - {{ obj_pengeluaran.jabatan }}">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" type="button" onclick="pilih_pegawai('id_pegawai', 'pegawai_ybs');">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Diketahui Oleh</label>
 					<div class="col-sm-10">
-						<select name="diketahui_oleh" id="diketahui_oleh" class="form-control">
-							<option value=""></option>
-							{% for combo in combo_pegawai %}
-								<optgroup label="{{ combo.jenis_pegawai }}">
-								{% for rincian in combo.rincian %}
-									{% set selected = "" %}
-									{% if rincian.id == obj_pengeluaran.diketahui_oleh %}
-										{% set selected = "selected='selected'" %}
-									{% endif %}
-									<option value="{{ rincian.id }}" {{ selected }}>{{ rincian.nama_pegawai }}</option>
-								{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
+						<div class="input-group">
+							<input type="hidden" class="form-control" placeholder="Search" name="diketahui_oleh" id="diketahui_oleh" value="{{ obj_pengeluaran.diketahui_oleh }}-{{ obj_pengeluaran.diketahui_oleh_riwayat }}">
+							<input type="text" class="form-control" placeholder="Search" name="pegawai_do" id="pegawai_do" readonly="readonly" value="{{ obj_pengeluaran.nama_pegawai_diketahui }} - {{ obj_pengeluaran.jabatan_diketahui }}">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" type="button" onclick="pilih_pegawai('diketahui_oleh', 'pegawai_do');">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Pejabat Kwitansi</label>
 					<div class="col-sm-10">
-						<select name="kuasa_pengguna_anggaran" id="kuasa_pengguna_anggaran" class="form-control">
-							<option value=""></option>
-							{% for combo in combo_pegawai %}
-								<optgroup label="{{ combo.jenis_pegawai }}">
-								{% for rincian in combo.rincian %}
-									{% set selected = "" %}
-									{% if rincian.id == obj_pengeluaran.kuasa_pengguna_anggaran %}
-										{% set selected = "selected='selected'" %}
-									{% endif %}
-									<option value="{{ rincian.id }}" {{ selected }}>{{ rincian.nama_pegawai }}</option>
-								{% endfor %}
-								</optgroup>
-							{% endfor %}
-						</select>
+						<div class="input-group">
+							<input type="hidden" class="form-control" placeholder="Search" name="kuasa_pengguna_anggaran" id="kuasa_pengguna_anggaran" value="{{ obj_pengeluaran.kuasa_pengguna_anggaran }}-{{ obj_pengeluaran.kuasa_pengguna_anggaran_riwayat }}">
+							<input type="text" class="form-control" placeholder="Search" name="pegawai_kpa" id="pegawai_kpa" readonly="readonly" value="{{ obj_pengeluaran.nama_pegawai_kuitansi }} - {{ obj_pengeluaran.jabatan_kuitansi }}">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" type="button" onclick="pilih_pegawai('kuasa_pengguna_anggaran', 'pegawai_kpa');">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">

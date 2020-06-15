@@ -122,6 +122,10 @@
 	}
 	
 	if($_POST["save"] == "Save") {
+		$id_pegawai = explode("-", $_POST["id_pegawai"]);
+		$diketahui_oleh = explode("-", $_POST["diketahui_oleh"]);
+		$kuasa_pengguna_anggaran = explode("-", $_POST["kuasa_pengguna_anggaran"]);
+		
 		$obj = new PermohonanDanaModel();
 		$obj->tanggal = $_POST["tanggal"];
 		$obj->nomor = "";
@@ -130,17 +134,26 @@
 		$obj->na_tahun = $_POST["na_tahun"];
 		$obj->na_divisi = $_POST["na_divisi"];
 		$obj->keterangan = $_POST["keperluan"];
-		$obj->id_pegawai_ybs = $_POST["id_pegawai"];
-		$obj->diketahui_oleh = $_POST["diketahui_oleh"];
-		$obj->kuasa_pengguna_anggaran = $_POST["kuasa_pengguna_anggaran"];
+		
+		$obj->id_pegawai_ybs = $id_pegawai[0];
+		$obj->diketahui_oleh = $diketahui_oleh[0];
+		$obj->kuasa_pengguna_anggaran = $kuasa_pengguna_anggaran[0];
+		
+		$obj->id_pegawai_ybs_riwayat = $id_pegawai[1];
+		$obj->diketahui_oleh_riwayat = $diketahui_oleh[1];
+		$obj->kuasa_pengguna_anggaran_riwayat = $kuasa_pengguna_anggaran[1];
+		
 		$obj->no_sptjb = $_POST["no_sptjb"];
 		$obj->jenis_belanja = $_POST["jenis_belanja"];
 		$obj->menyatakan = $_POST["menyatakan"];
+		
+		$obj->id_data_rekanan_pic = $_POST["id_data_rekanan_pic"];
+		
 		$obj->Insert();
 		$obj->KaitkanDetail();
 		
 		// Kaitkan daftar normatif
-		$sql_update = "UPDATE t_detail_permohonan_dana_normatif SET id_belanja_honor='" . $obj->id_yg_diinsert . "' WHERE id_belanja_honor='0' AND user_insert='" . $_SESSION["APP_USER_ID"] . "'";
+		$sql_update = "UPDATE t_detail_permohonan_dana_normatif SET id_belanja_honor='" . $obj->id_yg_diinsert . "' WHERE (id_belanja_honor='0' OR id_belanja_honor IS NULL) AND user_insert='" . $_SESSION["APP_USER_ID"] . "'";
 		mysqli_query($app_conn, $sql_update);
 		
 		header("location:cetak_berkas_host.php?id=" . $obj->id_yg_diinsert . "&pd=" . $_POST["pd"]);
@@ -179,6 +192,35 @@
 		array_push($list_normatif, $ds_list_normatif);
 	}
 	
+	// List Rekanan
+	$db_rekanan = new DBConnection();
+	$db_rekanan->perintahSQL = "
+		SELECT
+			1 AS jenis, id_data_rekanan, 0 AS id_data_rekanan_pic,
+			CONCAT(id_data_rekanan,'-',0) AS id_assoc,
+			nama_perusahaan, '' AS nama_pic
+		FROM
+			itbl_apps_data_rekanan
+		UNION
+		SELECT
+			2 AS jenis, pic.id_data_rekanan, pic.id_data_rekanan_pic,
+			CONCAT(pic.id_data_rekanan,'-',pic.id_data_rekanan_pic) AS id_assoc,
+			rekanan.nama_perusahaan, pic.nama AS nama_pic
+		FROM
+			itbl_apps_data_rekanan_pic pic
+			LEFT JOIN itbl_apps_data_rekanan rekanan ON pic.id_data_rekanan = rekanan.id_data_rekanan
+		UNION
+		SELECT
+			3 AS jenis, id_data_rekanan, 0 AS id_data_rekanan_pic,
+			CONCAT(id_data_rekanan,'-',0) AS id_assoc,
+			nama_perusahaan, '' AS nama_pic
+		FROM
+			itbl_apps_data_rekanan
+		ORDER BY
+			nama_perusahaan ASC, id_data_rekanan ASC, jenis ASC
+	";
+	$rekanan = $db_rekanan->execute_reader();
+	
 	/********************************************* Twig engine *********************************************/
 	Twig_Autoloader::register();
 
@@ -187,13 +229,15 @@
 	
 	echo $twig->render('inp_permohonan_dana.php', array(
 			'judul' => 'Assalamualaikum',
+			'user_id' => $_SESSION["APP_USER_ID"],
 			'pajak' => $pajak,
 			'combo_pegawai' => $combo_pegawai,
 			'data_detail' => $data_detail,
 			'list_normatif' => $list_normatif,
 			'na_nomor' => $na_nomor,
 			'na_bulan' => $na_bulan,
-			'pd' => $_GET["pd"]
+			'pd' => $_GET["pd"],
+			'rekanan' => $rekanan
 		)
 	);
 	/********************************************* End Of : Twig Engine *********************************************/
