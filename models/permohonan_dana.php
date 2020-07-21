@@ -660,11 +660,7 @@
 						a.qty, a.sbu_honor,
 						@jumlah_bruto := (a.qty * a.sbu_honor) AS jumlah_bruto,
 						d.besar_pph,
-						@pph := 
-							CASE
-								WHEN b.id_jenis_pegawai = '3' THEN CEIL(@jumlah_bruto / 2 * 5 / 100)
-								ELSE COALESCE(CEIL(@jumlah_bruto * d.besar_pph / 100), 0)
-							END AS pph,
+						@pph := a.pph AS pph,
 						(@jumlah_bruto - @pph) AS jumlah_dibayarkan
 				FROM
 						t_detail_permohonan_dana_normatif a

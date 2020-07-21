@@ -93,6 +93,15 @@
 			$("#add").show();
     		$("#edit").hide();
 		}
+		
+		function pilih_pegawai(id_value, id_show){
+            var width = 1200;
+            var height = 500;
+            var top = (window.screen.height / 2) - ((height / 2) + 50);
+            var left = (window.screen.width / 2) - ((width / 2) + 10);
+            
+            window.open("../urlrvl/AmbilDataPegawai?id_value=" + id_value + "&id_show=" + id_show, "", "top=" + top + ",left=" + left + ",width=" + width + ",height=" + height + ",toolbar=no,menubar=no,scrollbars=yes,location=no,directories=no");
+        }
 	</script>
 	<div class="panel panel-primary">
 		<div class="panel-heading">Rincian Belanja Honor</div>
@@ -204,7 +213,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Pegawai YBS</label>
 					<div class="col-sm-10">
-						<select name="id_pegawai_ybs" id="id_pegawai_ybs" class="form-control">
+						<!--<select name="id_pegawai_ybs" id="id_pegawai_ybs" class="form-control">
 							<option value=""></option>
 							{% for combo in combo_pegawai %}
 								<optgroup label="{{ combo.jenis_pegawai }}">
@@ -213,13 +222,22 @@
 								{% endfor %}
 								</optgroup>
 							{% endfor %}
-						</select>
+						</select>-->
+						<div class="input-group">
+                            <input type="hidden" class="form-control" placeholder="Search" name="id_pegawai_ybs" id="id_pegawai_ybs">
+                            <input type="text" class="form-control" placeholder="Search" name="pegawai_ybs" id="pegawai_ybs" readonly="readonly">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" type="button" onclick="pilih_pegawai('id_pegawai_ybs', 'pegawai_ybs');">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="penerima">Diketahui Oleh</label>
 					<div class="col-sm-10">
-						<select name="diketahui_oleh" id="diketahui_oleh" class="form-control">
+						<!--<select name="diketahui_oleh" id="diketahui_oleh" class="form-control">
 							<option value=""></option>
 							{% for combo in combo_pegawai %}
 								<optgroup label="{{ combo.jenis_pegawai }}">
@@ -228,7 +246,16 @@
 								{% endfor %}
 								</optgroup>
 							{% endfor %}
-						</select>
+						</select>-->
+						<div class="input-group">
+                            <input type="hidden" class="form-control" placeholder="Search" name="diketahui_oleh" id="diketahui_oleh">
+                            <input type="text" class="form-control" placeholder="Search" name="pegawai_do" id="pegawai_do" readonly="readonly">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" type="button" onclick="pilih_pegawai('diketahui_oleh', 'pegawai_do');">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 					</div>
 				</div>
 				<div class="form-group">

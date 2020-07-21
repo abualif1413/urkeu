@@ -40,42 +40,46 @@
 			global $app_conn;
 			$sql = "
 				SELECT
-					CONCAT(2,'-',a.id) AS barcode,
-					a.id,
-					a.satuan,
-					a.tanggal,
-					a.nomor,
-					LPAD(a.na_nomor, 4, '0') AS na_nomor,
-					a.na_bulan,
-					a.na_tahun,
-					a.na_divisi,
-					a.keterangan,
-					a.id_pegawai_ybs,
-					a.diketahui_oleh,
-					a.kuasa_pengguna_anggaran,
-					a.no_sptjb,
-					a.jenis_belanja,
-					a.menyatakan,
-					a.user_insert,
-					b.nama_pegawai, c.golongan, d.pangkat, b.jabatan, b.nik,
-					b.id_jenis_pegawai, b1.id_jenis_pegawai AS id_jenis_pegawai_diketahui,
-					b1.nik AS nik_diketahui,
-					b1.nama_pegawai AS nama_pegawai_diketahui,
-					c1.golongan AS golongan_diketahui,
-					d1.pangkat AS pangkat_diketahui,
-					b1.jabatan AS jabatan_diketahui
-				FROM
-					t_belanja_honor a
-					LEFT JOIN t_pegawai b ON a.id_pegawai_ybs = b.id
-					LEFT JOIN m_golongan c ON b.id_golongan = c.id
-					LEFT JOIN m_pangkat_pegawai d ON b.id_pangkat = d.id
-					LEFT JOIN t_pegawai b1 ON a.diketahui_oleh = b1.id
-					LEFT JOIN m_golongan c1 ON b1.id_golongan = c1.id
-					LEFT JOIN m_pangkat_pegawai d1 ON b1.id_pangkat = d1.id
-				WHERE
-					a.id='" . $id . "'
-				ORDER BY
-					a.tanggal ASC, a.nomor ASC
+                    CONCAT(2,'-',a.id) AS barcode,
+                    a.id,
+                    a.satuan,
+                    a.tanggal,
+                    a.nomor,
+                    LPAD(a.na_nomor, 4, '0') AS na_nomor,
+                    a.na_bulan,
+                    a.na_tahun,
+                    a.na_divisi,
+                    a.keterangan,
+                    a.id_pegawai_ybs,
+                    a.diketahui_oleh,
+                    a.id_pegawai_ybs_riwayat,
+                    a.diketahui_oleh_riwayat,
+                    a.kuasa_pengguna_anggaran,
+                    a.no_sptjb,
+                    a.jenis_belanja,
+                    a.menyatakan,
+                    a.user_insert,
+                    b.nama_pegawai, c.golongan, d.pangkat, b_riwayat.jabatan, b_riwayat.nik,
+                    b.id_jenis_pegawai, b1.id_jenis_pegawai AS id_jenis_pegawai_diketahui,
+                    b1.nik AS nik_diketahui,
+                    b1.nama_pegawai AS nama_pegawai_diketahui,
+                    c1.golongan AS golongan_diketahui,
+                    d1.pangkat AS pangkat_diketahui,
+                    b1_riwayat.jabatan AS jabatan_diketahui
+                FROM
+                    t_belanja_honor a
+                    LEFT JOIN t_pegawai b ON a.id_pegawai_ybs = b.id
+                    LEFT JOIN itbl_apps_riwayat_pegawai b_riwayat ON a.id_pegawai_ybs_riwayat = b_riwayat.id_riwayat_pegawai
+                    LEFT JOIN m_golongan c ON b_riwayat.id_golongan = c.id
+                    LEFT JOIN m_pangkat_pegawai d ON b_riwayat.id_pangkat = d.id
+                    LEFT JOIN t_pegawai b1 ON a.diketahui_oleh = b1.id
+                    LEFT JOIN itbl_apps_riwayat_pegawai b1_riwayat ON a.diketahui_oleh_riwayat = b1_riwayat.id_riwayat_pegawai
+                    LEFT JOIN m_golongan c1 ON b1_riwayat.id_golongan = c1.id
+                    LEFT JOIN m_pangkat_pegawai d1 ON b1_riwayat.id_pangkat = d1.id
+                WHERE
+                    a.id='" . $id . "'
+                ORDER BY
+                    a.tanggal ASC, a.nomor ASC
 			";
 			$res = mysqli_query($app_conn, $sql);
 			$data = array();

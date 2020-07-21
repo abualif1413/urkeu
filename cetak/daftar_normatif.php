@@ -88,7 +88,7 @@
 				<tr align='center'>
 					<th width='30px'>NO</th>
 					<th width='150px'>NAMA</th>
-					<th width='150px'>PANGKAT/NRP</th>
+					<th width='150px'>PANGKAT/NRP/NIK</th>
 					<th>JABATAN STRUKTURAL</th>
 					<th>JABATAN PENGELOLA</th>
 					<th width='50px'>JUMLAH<br />" . strtoupper($record["satuan"]) . "</th>

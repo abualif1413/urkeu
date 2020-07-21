@@ -16,12 +16,12 @@
 	*/
 	
 	// Live server windows
-	
-	/*$host		= "localhost";
+	/*
+	$host		= "localhost";
 	$user		= "root";
 	$pass		= "urkeu_db";
-	$db_name	= "juliadi";*/
-	
+	$db_name	= "juliadi";
+	*/
 	
 	$app_conn		= mysqli_connect($host, $user, $pass) or die(mysql_error());
 	$app_select_db	= mysqli_select_db($app_conn, $db_name) or die(mysql_error());

@@ -1,5 +1,5 @@
 <?php
-	error_reporting(0);
+	//error_reporting(0);
 	session_start();
 	include_once "../models/autoloader.php";
 	include_once "../models/terbilang.php";
@@ -26,112 +26,113 @@
 	$konf_kaurkeu = get_ttd_dokumen(9, "002", $tanggal);
 	
 	// Mencari nomor pertama dari buku kas nya
-	$db_nomor_buku = new DBConnection();
-	$db_nomor_buku->perintahSQL = "
-		SELECT
-			'saldo' AS jenis, 1 AS urutan, COALESCE(a.id, 0) AS id, COALESCE(a.per_tgl, '') AS tanggal,
-			'Saldo awal' AS keterangan,
-			0 AS ppn, 0 AS pph, COALESCE(a.saldo, 0) AS total
-		FROM
-			itbl_apps_saldo_buku a
-		WHERE
-			a.per_tgl >= '" . $tanggal_pertama_tahun . "' AND a.per_tgl < '" . $tanggal . "'
-			
-		UNION
-		
-		SELECT
-			'spp' AS jenis, 1 AS urutan, a.id, a.tanggal,
-			CONCAT('Diterima dari rekening No. 0336-01-003220-30.1 berdasarkan SPP/SPM No, ', a.nomor, ' untuk pembayaran ', a.keterangan) AS keterangan,
-			a.ppn, a.pph, a.total
-		FROM
-			vw_daftar_spp_spm a
-		WHERE
-			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
-		
-		UNION
-		
-		SELECT
-			'pu' AS jenis, 2 AS urutan, a.id, a.tanggal,
-			CONCAT('Pergeseran Uang : ', a.keterangan) AS keterangan,
-			0 AS ppn, 0 AS pph, SUM(c.total) AS total
-		FROM
-			itbl_apps_pu a
-			LEFT JOIN itbl_apps_pu_detail b ON a.id = b.id_pu
-			LEFT JOIN vw_daftar_spp_spm c ON b.id_spp_spm = c.id
-		WHERE
-			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
-		GROUP BY
-			a.id
-		
-		UNION
-		
-		SELECT
-			'terima_lain' AS jenis, 3 AS urutan, a.id, a.tanggal,
-			a.keterangan,
-			0 AS ppn, 0 AS pph, a.jumlah AS total
-		FROM
-			itbl_apps_penerimaan_lain a
-		WHERE
-			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
-		
-		UNION
-		
-		SELECT
-			'spby' AS jenis, 4 AS urutan, a.id_spp_spm, a.tanggal,
-			CONCAT('Dibayarkan ',b.keterangan, ' kepada ',a.penerima,' ',a.pangkat_penerima,' ',a.sebutan_nik_penerima,' ',a.nik_penerima,' telepon : ',a.telp_penerima) AS keterangan,
-			b.ppn, b.pph, b.total
-		FROM
-			itbl_apps_spby a
-			INNER JOIN vw_daftar_spp_spm b ON a.id_spp_spm = b.id
-		WHERE
-			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
-		
-		UNION
-		
-		SELECT
-			'keluar_lain' AS jenis, 5 AS urutan, a.id, a.tanggal,
-			a.keterangan,
-			0 AS ppn, 0 AS pph, a.jumlah AS total
-		FROM
-			itbl_apps_pengeluaran_lain a
-		WHERE
-			a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
-			
-		UNION
-		
-		SELECT
-			'pajak' AS jenis, 6 AS urutan,
-			pajak.id, CONCAT(pajak.tanggal, ' 00:00:00') AS tanggal, pajak.keterangan,
-			SUM(
-				CASE
-					WHEN setpajak.jenis = 'ppn' THEN sppspm.ppn
-					ELSE 0
-				END
-			) AS ppn,
-			SUM(
-				CASE
-					WHEN setpajak.jenis = 'pph' THEN sppspm.pph
-					ELSE 0
-				END
-			) AS pph, 0 AS total
-		FROM
-			vw_daftar_spp_spm sppspm
-			INNER JOIN itbl_apps_penyetoran_pajak_detail setpajak ON sppspm.id = setpajak.id_spp_spm
-			INNER JOIN itbl_apps_penyetoran_pajak pajak ON setpajak.id_penyetoran_pajak = pajak.id
-		WHERE
-			pajak.tanggal >= '" . $tanggal_pertama_tahun . "' AND pajak.tanggal < '" . $tanggal . "'
-		GROUP BY
-			pajak.id
-	";
-	$ds_nomor_buku = $db_nomor_buku->execute_reader();
-	unset($db_nomor_buku);
-	$nomor_buku = 0;
-	foreach ($ds_nomor_buku as $dsnb) {
-		if($dsnb["jenis"] != "pu") {
-			$nomor_buku++;
-		}
-	}
-	//$nomor_buku++;
+	// $db_nomor_buku = new DBConnection();
+	// $db_nomor_buku->perintahSQL = "
+		// SELECT
+			// 'saldo' AS jenis, 1 AS urutan, COALESCE(a.id, 0) AS id, COALESCE(a.per_tgl, '') AS tanggal,
+			// 'Saldo awal' AS keterangan,
+			// 0 AS ppn, 0 AS pph, COALESCE(a.saldo, 0) AS total
+		// FROM
+			// itbl_apps_saldo_buku a
+		// WHERE
+			// a.per_tgl >= '" . $tanggal_pertama_tahun . "' AND a.per_tgl < '" . $tanggal . "'
+// 			
+		// UNION
+// 		
+		// SELECT
+			// 'spp' AS jenis, 1 AS urutan, a.id, a.tanggal,
+			// CONCAT('Diterima dari rekening No. 0336-01-003220-30.1 berdasarkan SPP/SPM No, ', a.nomor, ' untuk pembayaran ', a.keterangan) AS keterangan,
+			// a.ppn, a.pph, a.total
+		// FROM
+			// vw_daftar_spp_spm a
+		// WHERE
+			// a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
+// 		
+		// UNION
+// 		
+		// SELECT
+			// 'pu' AS jenis, 2 AS urutan, a.id, a.tanggal,
+			// CONCAT('Pergeseran Uang : ', a.keterangan) AS keterangan,
+			// 0 AS ppn, 0 AS pph, SUM(c.total) AS total
+		// FROM
+			// itbl_apps_pu a
+			// LEFT JOIN itbl_apps_pu_detail b ON a.id = b.id_pu
+			// LEFT JOIN vw_daftar_spp_spm c ON b.id_spp_spm = c.id
+		// WHERE
+			// a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
+		// GROUP BY
+			// a.id
+// 		
+		// UNION
+// 		
+		// SELECT
+			// 'terima_lain' AS jenis, 3 AS urutan, a.id, a.tanggal,
+			// a.keterangan,
+			// 0 AS ppn, 0 AS pph, a.jumlah AS total
+		// FROM
+			// itbl_apps_penerimaan_lain a
+		// WHERE
+			// a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
+// 		
+		// UNION
+// 		
+		// SELECT
+			// 'spby' AS jenis, 4 AS urutan, a.id_spp_spm, a.tanggal,
+			// CONCAT('Dibayarkan ',b.keterangan, ' kepada ',a.penerima,' ',a.pangkat_penerima,' ',a.sebutan_nik_penerima,' ',a.nik_penerima,' telepon : ',a.telp_penerima) AS keterangan,
+			// b.ppn, b.pph, b.total
+		// FROM
+			// itbl_apps_spby a
+			// INNER JOIN vw_daftar_spp_spm b ON a.id_spp_spm = b.id
+		// WHERE
+			// a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
+// 		
+		// UNION
+// 		
+		// SELECT
+			// 'keluar_lain' AS jenis, 5 AS urutan, a.id, a.tanggal,
+			// a.keterangan,
+			// 0 AS ppn, 0 AS pph, a.jumlah AS total
+		// FROM
+			// itbl_apps_pengeluaran_lain a
+		// WHERE
+			// a.tanggal >= '" . $tanggal_pertama_tahun . "' AND a.tanggal < '" . $tanggal . "'
+// 			
+		// UNION
+// 		
+		// SELECT
+			// 'pajak' AS jenis, 6 AS urutan,
+			// pajak.id, CONCAT(pajak.tanggal, ' 00:00:00') AS tanggal, pajak.keterangan,
+			// SUM(
+				// CASE
+					// WHEN setpajak.jenis = 'ppn' THEN sppspm.ppn
+					// ELSE 0
+				// END
+			// ) AS ppn,
+			// SUM(
+				// CASE
+					// WHEN setpajak.jenis = 'pph' THEN sppspm.pph
+					// ELSE 0
+				// END
+			// ) AS pph, 0 AS total
+		// FROM
+			// vw_daftar_spp_spm sppspm
+			// INNER JOIN itbl_apps_penyetoran_pajak_detail setpajak ON sppspm.id = setpajak.id_spp_spm
+			// INNER JOIN itbl_apps_penyetoran_pajak pajak ON setpajak.id_penyetoran_pajak = pajak.id
+		// WHERE
+			// pajak.tanggal >= '" . $tanggal_pertama_tahun . "' AND pajak.tanggal < '" . $tanggal . "'
+		// GROUP BY
+			// pajak.id
+	// ";
+	// $ds_nomor_buku = $db_nomor_buku->execute_reader();
+	// unset($db_nomor_buku);
+	// $nomor_buku = 0;
+	// foreach ($ds_nomor_buku as $dsnb) {
+		// if($dsnb["jenis"] != "pu") {
+			// $nomor_buku++;
+		// }
+	// }
+	
+	$nomor_buku = 1;
 	
 	
 	$sql_utama = "

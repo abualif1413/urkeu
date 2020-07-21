@@ -28,6 +28,21 @@ class AmbilDataPegawai extends Controller
         ]);
     }
 
+    public function searchPegawai(Request $request) {
+        $pegawai = DB::select("
+            SELECT
+                id, nama_pegawai
+            FROM
+                t_pegawai
+            WHERE
+                hapus = 'N' AND nama_pegawai LIKE ?
+            ORDER BY
+                nama_pegawai ASC
+        ", ["%" . $request->cari . "%"]);
+
+        return response()->json(["data" => $pegawai]);
+    }
+
     public function getAllJabatan($id_pegawai) {
         $jabatan = RiwayatPegawai::where('id_pegawai', $id_pegawai)
                     ->orderBy('per_tanggal', 'desc', 'id_riwayat_pegawai', 'desc')

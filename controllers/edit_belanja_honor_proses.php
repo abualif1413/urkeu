@@ -67,13 +67,18 @@
 	}
 	
 	if($_POST["save"] == "Save") {
+	    $id_pegawai_ybs = explode("-", $_POST["id_pegawai_ybs"]);
+        $diketahui_oleh = explode("-", $_POST["diketahui_oleh"]);
+        
 		$db = new DBConnection();
 		$db->perintahSQL = "
 			UPDATE t_belanja_honor SET
 				tanggal=?, nomor=?,
 				na_nomor=?, na_bulan=?, na_tahun=?, na_divisi=?,
-				keterangan=?, id_pegawai_ybs=?,
-				diketahui_oleh=?, kuasa_pengguna_anggaran=?,
+				keterangan=?,
+				id_pegawai_ybs=?, id_pegawai_ybs_riwayat=?,
+				diketahui_oleh=?, diketahui_oleh_riwayat=?,
+				kuasa_pengguna_anggaran=?,
 				no_sptjb=?, jenis_belanja=?, menyatakan=?, satuan=?, user_insert=?
 			WHERE
 				id=?
@@ -88,9 +93,13 @@
 		$db->add_parameter("s", $_POST["na_divisi"]);
 		
 		$db->add_parameter("s", $_POST["keterangan"]);
-		$db->add_parameter("i", $_POST["id_pegawai_ybs"]);
+        
+		$db->add_parameter("i", $id_pegawai_ybs[0]);
+        $db->add_parameter("i", $id_pegawai_ybs[1]);
 		
-		$db->add_parameter("i", $_POST["diketahui_oleh"]);
+		$db->add_parameter("i", $diketahui_oleh[0]);
+        $db->add_parameter("i", $diketahui_oleh[1]);
+        
 		$db->add_parameter("i", $_POST["kuasa_pengguna_anggaran"]);
 		
 		$db->add_parameter("s", $_POST["no_sptjb"]);

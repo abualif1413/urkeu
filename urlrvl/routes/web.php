@@ -31,6 +31,7 @@ Route::get('/DataPICRekanan/HapusPICRekanan/{idDataRekananPIC}', 'DataPICRekanan
 
 Route::get('/AmbilDataPegawai', 'AmbilDataPegawai@index');
 Route::get('/AmbilDataPegawai/GetAllJabatan/{id_pegawai}', 'AmbilDataPegawai@getAllJabatan');
+Route::get('/AmbilDataPegawai/SearchPegawai', 'AmbilDataPegawai@searchPegawai');
 
 
 Route::get('/RiwayatPegawai', 'RiwayatPegawaiController@index');

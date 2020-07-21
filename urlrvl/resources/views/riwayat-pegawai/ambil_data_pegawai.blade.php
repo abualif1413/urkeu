@@ -10,8 +10,8 @@
                 $.each(r.data, function(i, v) {
                     lj += "<a href='javascript:void(0)'' class='list-group-item' ondblclick='memilih(" + id_pegawai + ", " + v.id_riwayat_pegawai + ", \"" + nama_pegawai + "\", \"" + v.jabatan + "\");'>" +
                             "<div style='margin-bottom: 10px;'><strong>Jabatan</strong><br />" + v.jabatan + "</div>" +
-                            "<div style='margin-bottom: 10px;'><strong>Pangkat</strong><br />" + v.pangkat + "</div>" +
-                            "<div style='margin-bottom: 10px;'><strong>Golongan</strong><br />" + v.golongan + "</div>" +
+                            "<div style='margin-bottom: 10px;'><strong>Pangkat</strong><br />" + (v.pangkat != null ? v.pangkat : "-") + "</div>" +
+                            "<div style='margin-bottom: 10px;'><strong>Golongan</strong><br />" + (v.golongan != null ? v.golongan : "-") + "</div>" +
                             "</a>";
                 });
                 $("#list_jabatan").html(lj);
@@ -19,6 +19,24 @@
             .fail(function() {
                 alert("Error di load data jabatan");
             });
+    }
+
+    function search_pegawai() {
+        var keyword = $("#cari").val();
+
+        if(keyword.length >= 0) {
+            $.get("{{ url('/AmbilDataPegawai/SearchPegawai') }}", {cari: keyword}, function() {})
+                .done(function(r) {
+                    var pegawai = r.data;
+                    var isi = "";
+                    for(var i=0; i<pegawai.length; i++) {
+                        isi += "<a href='javascript:void(0)' class='list-group-item' ondblclick='getAllJabatan(" + pegawai[i].id + ", \"" + pegawai[i].nama_pegawai + "\");'>" + pegawai[i].nama_pegawai + "</a>";
+                    }
+                    $("#lg_pegawai").html(isi);
+                })
+                .fail(function() {
+                });
+        }
     }
 
     function memilih(id_pegawai, id_riwayat_pegawai, nama_pegawai, jabatan) {
@@ -33,7 +51,7 @@
     <div class="input-group">
         <input type="hidden" name="id_value" value="{{ $id_value }}">
         <input type="hidden" name="id_show" value="{{ $id_show }}">
-        <input type="text" class="form-control" placeholder="Search" name="cari" id="cari" value="{{ $cari }}" />
+        <input type="text" class="form-control" placeholder="Search" name="cari" id="cari" value="{{ $cari }}" onkeyup="search_pegawai();" />
         <div class="input-group-btn">
             <button class="btn btn-primary" type="submit">
                 <i class="fa fa-search"></i>
@@ -44,7 +62,7 @@
 <br />
 <div class="row">
     <div class="col-sm-8" style="height: 400px; overflow: scroll;">
-        <div class="list-group">
+        <div class="list-group" id="lg_pegawai">
         @foreach ($pegawai as $peg)
             <a href="javascript:void(0)" class="list-group-item" ondblclick="getAllJabatan({{ $peg->id }}, '{{ $peg->nama_pegawai }}');">{{ $peg->nama_pegawai }}</a>
         @endforeach
